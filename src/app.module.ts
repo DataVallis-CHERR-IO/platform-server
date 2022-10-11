@@ -1,0 +1,71 @@
+import { join } from 'path'
+import { Logger, Module } from '@nestjs/common'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { GraphQLModule } from '@nestjs/graphql'
+import { MongooseModule } from '@nestjs/mongoose'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
+import { GraphQLError } from 'graphql'
+import { IGraphQLErrorException } from './interfaces/graphql/graphql.interface'
+import { APP_FILTER, APP_GUARD } from '@nestjs/core'
+import { GraphqlAuthGuard } from './guards/graphql-auth.guard'
+import { JwtStrategy } from './strategies/jwt.strategy'
+import { PassportModule } from '@nestjs/passport'
+import { GlobalExceptionFilter } from './filters/global-exception.filter'
+import { WinstonModule } from 'nest-winston'
+import { SubscriberModule } from './modules/subscriber/subscriber.module'
+import * as winston from 'winston'
+import { CampaignModule } from './modules/campaign/campaign.module'
+import { CampaignDetailModule } from './modules/campaign-detail/campaign-detail.module'
+import { CampaignDocumentModule } from './modules/campaign-document/campaign-document.module'
+import { CampaignImageModule } from './modules/campaign-image/campaign-image.module'
+
+@Module({
+  imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      typePaths: ['./**/*.graphql'],
+      installSubscriptionHandlers: true,
+      definitions: {
+        path: join(process.cwd(), 'src/graphql.ts'),
+        outputAs: 'class'
+      },
+      context: ({ req, res }) => ({ req, res }),
+      formatError: (graphQLError: GraphQLError) =>
+        ({
+          name: graphQLError.name,
+          message: graphQLError.message
+        } as IGraphQLErrorException)
+    }),
+    MongooseModule.forRoot(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`),
+    WinstonModule.forRoot({
+      level: process.env.LOGGER_LEVEL,
+      transports: [
+        new winston.transports.File({
+          filename: join(process.cwd(), process.env.LOGGER_PATH)
+        })
+      ]
+    }),
+    PassportModule,
+    SubscriberModule,
+    CampaignModule,
+    CampaignDetailModule,
+    CampaignDocumentModule,
+    CampaignImageModule
+  ],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: GraphqlAuthGuard
+    },
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter
+    },
+    JwtStrategy,
+    Logger
+  ]
+})
+export class AppModule {}

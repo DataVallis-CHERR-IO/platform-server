@@ -1,0 +1,16 @@
+type Query {
+    campaignImages(campaignId: String): [CampaignImage]
+}
+
+type CampaignImage {
+    _id: String
+    campaignId: String
+    title: String
+    description: String
+    path: String
+    image: String
+    statusId: Int
+    createdAt: String
+    updatedAt: String
+    deletedAt: String
+}

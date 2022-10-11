@@ -1,0 +1,13 @@
+type Query {
+    subscribers: [Subscriber]
+}
+
+type Subscriber {
+    email: String
+    statusId: Int
+    subscribedAt: String
+}
+
+type Mutation {
+    subscribe(email: String): Boolean
+}

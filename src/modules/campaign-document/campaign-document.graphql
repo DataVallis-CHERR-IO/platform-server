@@ -1,0 +1,16 @@
+type Query {
+    campaignDocuments(campaignId: String): [CampaignDocument]
+}
+
+type CampaignDocument {
+    _id: String
+    campaignId: String
+    title: String
+    path: String
+    icon: String
+    format: String
+    statusId: Int
+    createdAt: String
+    updatedAt: String
+    deletedAt: String
+}
