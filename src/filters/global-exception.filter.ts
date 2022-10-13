@@ -28,10 +28,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   catch = async (exception: any, argumentsHost: ArgumentsHost): Promise<never> => {
     const context = argumentsHost.switchToRpc().getContext()
     const query = _.get(argumentsHost.getArgs(), '[2].req.body.query', '')
-    const queryObject = JSON.stringify(parse(query)) || ''
-    const message = exception?.getResponse()?.message || exception?.message || exception?.message?.error
+    const queryObject = query ? JSON.stringify(parse(query)) || '' : ''
+    const message = typeof exception === 'function' ? exception?.getResponse()?.message : exception?.message || exception?.message?.error
     const lkMessage = exception?.response?.lkMessage || null
-    const status = exception.getStatus() || HttpStatus.INTERNAL_SERVER_ERROR
+    const status = typeof exception === 'function' ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR
     const data = {
       message,
       context: JSON.stringify(context),

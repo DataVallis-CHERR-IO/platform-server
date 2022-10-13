@@ -1,4 +1,4 @@
-import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Info, Query, Resolver } from '@nestjs/graphql'
 import { Public } from '../../decorators/public.decorator'
 import { ProjectTypeService } from './project-type.service'
 import { getQuerySelections } from '../../helpers/default.helper'

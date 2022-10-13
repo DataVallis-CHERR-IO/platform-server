@@ -1,0 +1,4 @@
+{"level":"error","message":"{\"message\":\"Cannot read property 'logIn' of undefined\",\"context\":\"{}\",\"query\":\"\",\"queryObject\":\"\"}","stack":[null]}
+{"level":"error","message":"{\"message\":\"Cannot read property 'req' of undefined\",\"context\":\"{}\",\"query\":\"\",\"queryObject\":\"\"}","stack":[null]}
+{"level":"error","message":"{\"message\":\"Cannot read property 'req' of undefined\",\"context\":\"{}\",\"query\":\"\",\"queryObject\":\"\"}","stack":[null]}
+{"level":"error","message":"{\"message\":\"Cannot read property 'req' of undefined\",\"context\":\"{}\",\"query\":\"\",\"queryObject\":\"\"}","stack":[null]}

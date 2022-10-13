@@ -16,7 +16,7 @@ import { GlobalExceptionFilter } from './filters/global-exception.filter'
 import { WinstonModule } from 'nest-winston'
 import { SubscriberModule } from './modules/subscriber/subscriber.module'
 import { ProjectModule } from './modules/project/project.module'
-import { CampaignDetailModule } from './modules/campaign-detail/campaign-detail.module'
+import { ProjectDetailModule } from './modules/project-detail/project-detail.module'
 import { CampaignDocumentModule } from './modules/campaign-document/campaign-document.module'
 import { CampaignImageModule } from './modules/campaign-image/campaign-image.module'
 import { ProjectTypeModule } from './modules/project-type/project-type.module'
@@ -27,6 +27,10 @@ import { ProjectTypeModule } from './modules/project-type/project-type.module'
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
       installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true
+      },
       definitions: {
         path: join(process.cwd(), 'src/graphql.ts'),
         outputAs: 'class'
@@ -51,7 +55,7 @@ import { ProjectTypeModule } from './modules/project-type/project-type.module'
     SubscriberModule,
     ProjectModule,
     ProjectTypeModule,
-    CampaignDetailModule,
+    ProjectDetailModule,
     CampaignDocumentModule,
     CampaignImageModule
   ],

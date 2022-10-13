@@ -1,8 +1,8 @@
-export interface CampaignDetail {
+export interface ProjectDetail {
   _id?: string
-  campaignId?: string
-  requirements?: string
+  projectId?: string
   description?: string
+  requirements?: string
   createdAt?: string
   updatedAt?: string
 }

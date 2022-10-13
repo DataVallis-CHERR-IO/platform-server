@@ -8,29 +8,30 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export abstract class IQuery {
-    abstract campaignDetail(campaignId?: Nullable<string>): Nullable<CampaignDetail> | Promise<Nullable<CampaignDetail>>;
+export enum OrderDirection {
+    ASC = "ASC",
+    DESC = "DESC"
+}
 
+export class Sort {
+    orderBy?: Nullable<string>;
+    orderDirection?: Nullable<OrderDirection>;
+}
+
+export abstract class IQuery {
     abstract campaignDocuments(campaignId?: Nullable<string>): Nullable<Nullable<CampaignDocument>[]> | Promise<Nullable<Nullable<CampaignDocument>[]>>;
 
     abstract campaignImages(campaignId?: Nullable<string>): Nullable<Nullable<CampaignImage>[]> | Promise<Nullable<Nullable<CampaignImage>[]>>;
 
+    abstract projectDetail(projectId: string): ProjectDetail | Promise<ProjectDetail>;
+
     abstract projectTypes(): Nullable<Nullable<ProjectType>[]> | Promise<Nullable<Nullable<ProjectType>[]>>;
 
-    abstract projects(): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
+    abstract projects(sort?: Nullable<Sort>, skip?: Nullable<number>, limit?: Nullable<number>): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
 
-    abstract project(slug?: Nullable<string>): Nullable<Project> | Promise<Nullable<Project>>;
+    abstract project(slug: string): Nullable<Project> | Promise<Nullable<Project>>;
 
     abstract subscribers(): Nullable<Nullable<Subscriber>[]> | Promise<Nullable<Nullable<Subscriber>[]>>;
-}
-
-export class CampaignDetail {
-    _id?: Nullable<string>;
-    campaignId?: Nullable<string>;
-    requirements?: Nullable<string>;
-    description?: Nullable<string>;
-    createdAt?: Nullable<string>;
-    updatedAt?: Nullable<string>;
 }
 
 export class CampaignDocument {
@@ -59,6 +60,23 @@ export class CampaignImage {
     deletedAt?: Nullable<string>;
 }
 
+export abstract class IMutation {
+    abstract createProjectDetail(projectId: string, description: string, requirements?: Nullable<string>): ProjectDetail | Promise<ProjectDetail>;
+
+    abstract createProject(title: string, excerpt: string, slug: string, goal: number, image: string, contractAddress: string, statusId?: Nullable<number>, startedAt?: Nullable<string>): Project | Promise<Project>;
+
+    abstract subscribe(email?: Nullable<string>): Nullable<boolean> | Promise<Nullable<boolean>>;
+}
+
+export class ProjectDetail {
+    _id?: Nullable<string>;
+    projectId?: Nullable<string>;
+    description?: Nullable<string>;
+    requirements?: Nullable<string>;
+    createdAt?: Nullable<string>;
+    updatedAt?: Nullable<string>;
+}
+
 export class ProjectType {
     _id?: Nullable<string>;
     name?: Nullable<string>;
@@ -66,10 +84,8 @@ export class ProjectType {
     statusId?: Nullable<number>;
 }
 
-export abstract class IMutation {
-    abstract createProject(title: string, excerpt: string, slug: string, goal: number, image: string, contractAddress: string, statusId?: Nullable<number>, startedAt?: Nullable<string>): Nullable<Project> | Promise<Nullable<Project>>;
-
-    abstract subscribe(email?: Nullable<string>): Nullable<boolean> | Promise<Nullable<boolean>>;
+export abstract class ISubscription {
+    abstract projectCreated(): Nullable<Project> | Promise<Nullable<Project>>;
 }
 
 export class Project {
@@ -77,9 +93,9 @@ export class Project {
     title?: Nullable<string>;
     excerpt?: Nullable<string>;
     slug?: Nullable<string>;
-    contractAddress?: Nullable<string>;
     image?: Nullable<string>;
     goal?: Nullable<number>;
+    contractAddress?: Nullable<string>;
     statusId?: Nullable<number>;
     startedAt?: Nullable<string>;
     endedAt?: Nullable<string>;

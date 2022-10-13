@@ -21,7 +21,15 @@ export class ProjectService {
    * @param {IRequest} request
    * @returns {Promise<Project[]>}
    */
-  get = async (request: IRequest): Promise<Project[]> => this._projectModel.find().select(request.select).exec()
+  get = async (request: IRequest): Promise<Project[]> => {
+    const projectModel = this._projectModel.find().select(request.select)
+
+    !request.skip || projectModel.skip(request.skip)
+    !request.limit || projectModel.limit(request.limit)
+    !request.sort || projectModel.sort({ [request.sort.orderBy]: request.sort.orderDirection === 'ASC' ? 1 : -1 })
+
+    return projectModel.exec()
+  }
 
   /**
    * @method getBy

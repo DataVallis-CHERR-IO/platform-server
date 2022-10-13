@@ -10,7 +10,18 @@ export interface ICommonRes {
   lkMessage: string
 }
 
+type OrderDirection = 'ASC' | 'DESC'
+
+interface ISort {
+  orderBy: string
+  orderDirection: OrderDirection
+}
+
 export interface IRequest {
   args?: any
   select?: string[]
+  where?: any
+  sort?: ISort
+  skip?: number
+  limit?: number
 }

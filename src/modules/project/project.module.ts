@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { ProjectSchema } from './project.schema'
 import { ProjectService } from './project.service'
 import { ProjectResolver } from './project.resolver'
+import { PubSubModule } from '../pub-sub.module'
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { ProjectResolver } from './project.resolver'
         schema: ProjectSchema,
         collection: 'Project'
       }
-    ])
+    ]),
+    PubSubModule
   ],
   providers: [ProjectService, ProjectResolver],
   exports: [ProjectService]

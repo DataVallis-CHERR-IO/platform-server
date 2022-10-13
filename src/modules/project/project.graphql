@@ -1,10 +1,14 @@
 type Query {
-    projects: [Project]
-    project(slug: String): Project
+    projects(sort: Sort, skip: Int, limit: Int): [Project]
+    project(slug: String!): Project
 }
 
 type Mutation {
-    createProject(title: String!, excerpt: String!, slug: String!, goal: Float!, image: String!, contractAddress: String!, statusId: Int, startedAt: String): Project
+    createProject(title: String!, excerpt: String!, slug: String!, goal: Float!, image: String!, contractAddress: String!, statusId: Int, startedAt: String): Project!
+}
+
+type Subscription {
+    projectCreated: Project
 }
 
 type Project {
@@ -12,12 +16,22 @@ type Project {
     title: String
     excerpt: String
     slug: String
-    contractAddress: String
     image: String
     goal: Float
+    contractAddress: String
     statusId: Int
     startedAt: String
     endedAt: String
     createdAt: String
     updatedAt: String
+}
+
+input Sort {
+    orderBy: String
+    orderDirection: OrderDirection
+}
+
+enum OrderDirection {
+    ASC
+    DESC
 }

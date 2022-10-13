@@ -5,5 +5,6 @@
   "tabWidth": 2,
   "trailingComma": "none",
   "arrowParens": "avoid",
-  "semi": false
+  "semi": false,
+  "no-multiple-empty-lines": ["error", { "max": 2 }]
 }

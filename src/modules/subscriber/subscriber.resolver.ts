@@ -1,8 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { Subscriber } from '../../graphql'
 import { SubscriberService } from './subscriber.service'
 import { Public } from '../../decorators/public.decorator'
-import { getQuerySelections } from '../../helpers/default.helper'
 
 @Resolver('Subscriber')
 export class SubscriberResolver {
