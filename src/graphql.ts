@@ -15,9 +15,11 @@ export abstract class IQuery {
 
     abstract campaignImages(campaignId?: Nullable<string>): Nullable<Nullable<CampaignImage>[]> | Promise<Nullable<Nullable<CampaignImage>[]>>;
 
-    abstract campaigns(): Nullable<Nullable<Campaign>[]> | Promise<Nullable<Nullable<Campaign>[]>>;
+    abstract projectTypes(): Nullable<Nullable<ProjectType>[]> | Promise<Nullable<Nullable<ProjectType>[]>>;
 
-    abstract campaign(slug?: Nullable<string>): Nullable<Campaign> | Promise<Nullable<Campaign>>;
+    abstract projects(): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
+
+    abstract project(slug?: Nullable<string>): Nullable<Project> | Promise<Nullable<Project>>;
 
     abstract subscribers(): Nullable<Nullable<Subscriber>[]> | Promise<Nullable<Nullable<Subscriber>[]>>;
 }
@@ -57,15 +59,27 @@ export class CampaignImage {
     deletedAt?: Nullable<string>;
 }
 
-export class Campaign {
+export class ProjectType {
+    _id?: Nullable<string>;
+    name?: Nullable<string>;
+    lkName?: Nullable<string>;
+    statusId?: Nullable<number>;
+}
+
+export abstract class IMutation {
+    abstract createProject(title: string, excerpt: string, slug: string, goal: number, image: string, contractAddress: string, statusId?: Nullable<number>, startedAt?: Nullable<string>): Nullable<Project> | Promise<Nullable<Project>>;
+
+    abstract subscribe(email?: Nullable<string>): Nullable<boolean> | Promise<Nullable<boolean>>;
+}
+
+export class Project {
     _id?: Nullable<string>;
     title?: Nullable<string>;
-    description?: Nullable<string>;
+    excerpt?: Nullable<string>;
     slug?: Nullable<string>;
     contractAddress?: Nullable<string>;
     image?: Nullable<string>;
     goal?: Nullable<number>;
-    isHighlightedProject?: Nullable<boolean>;
     statusId?: Nullable<number>;
     startedAt?: Nullable<string>;
     endedAt?: Nullable<string>;
@@ -77,10 +91,6 @@ export class Subscriber {
     email?: Nullable<string>;
     statusId?: Nullable<number>;
     subscribedAt?: Nullable<string>;
-}
-
-export abstract class IMutation {
-    abstract subscribe(email?: Nullable<string>): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 type Nullable<T> = T | null;

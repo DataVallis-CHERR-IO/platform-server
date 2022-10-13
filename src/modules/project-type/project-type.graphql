@@ -1,0 +1,10 @@
+type Query {
+    projectTypes: [ProjectType]
+}
+
+type ProjectType {
+    _id: String
+    name: String
+    lkName: String
+    statusId: Int
+}

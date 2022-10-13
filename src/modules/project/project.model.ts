@@ -1,12 +1,11 @@
-export interface Campaign {
+export interface Project {
   _id?: string
   title?: string
-  description?: string
+  excerpt?: string
   slug?: string
-  contractAddress?: string
   image?: string
   goal?: number
-  isHighlightedProject?: boolean
+  contractAddress?: string
   statusId?: number
   startedAt?: string
   endedAt?: string

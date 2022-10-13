@@ -20,5 +20,6 @@ export class CampaignDocumentService {
    * @param {IRequest} request
    * @returns {Promise<CampaignDocument[]>}
    */
-  getBy = async (request: IRequest): Promise<CampaignDocument[]> => this._campaignDocumentModel.find({ campaignId: 'CvEWWnSqDKKX4X54VyJA9bK3' }).select(request.select).exec()
+  getBy = async (request: IRequest): Promise<CampaignDocument[]> =>
+    this._campaignDocumentModel.find({ campaignId: 'CvEWWnSqDKKX4X54VyJA9bK3' }).select(request.select).exec()
 }

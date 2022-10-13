@@ -1,0 +1,23 @@
+type Query {
+    projects: [Project]
+    project(slug: String): Project
+}
+
+type Mutation {
+    createProject(title: String!, excerpt: String!, slug: String!, goal: Float!, image: String!, contractAddress: String!, statusId: Int, startedAt: String): Project
+}
+
+type Project {
+    _id: String
+    title: String
+    excerpt: String
+    slug: String
+    contractAddress: String
+    image: String
+    goal: Float
+    statusId: Int
+    startedAt: String
+    endedAt: String
+    createdAt: String
+    updatedAt: String
+}

@@ -1,3 +1,4 @@
+import * as winston from 'winston'
 import { join } from 'path'
 import { Logger, Module } from '@nestjs/common'
 import { AppController } from './app.controller'
@@ -14,11 +15,11 @@ import { PassportModule } from '@nestjs/passport'
 import { GlobalExceptionFilter } from './filters/global-exception.filter'
 import { WinstonModule } from 'nest-winston'
 import { SubscriberModule } from './modules/subscriber/subscriber.module'
-import * as winston from 'winston'
-import { CampaignModule } from './modules/campaign/campaign.module'
+import { ProjectModule } from './modules/project/project.module'
 import { CampaignDetailModule } from './modules/campaign-detail/campaign-detail.module'
 import { CampaignDocumentModule } from './modules/campaign-document/campaign-document.module'
 import { CampaignImageModule } from './modules/campaign-image/campaign-image.module'
+import { ProjectTypeModule } from './modules/project-type/project-type.module'
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { CampaignImageModule } from './modules/campaign-image/campaign-image.mod
     }),
     PassportModule,
     SubscriberModule,
-    CampaignModule,
+    ProjectModule,
+    ProjectTypeModule,
     CampaignDetailModule,
     CampaignDocumentModule,
     CampaignImageModule
