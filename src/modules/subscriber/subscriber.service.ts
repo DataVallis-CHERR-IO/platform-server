@@ -19,16 +19,28 @@ export class SubscriberService {
   /**
    * @method subscribe
    * @param {IRequest} request
-   * @returns {Promise<Campaign[]>}
+   * @returns {Promise<string>}
    */
-  subscribe = async (request: IRequest): Promise<boolean> => {
-    const subscriber = new this._subscriberModel({
-      email: request.args.email,
-      statusId: StatusEnum.ACTIVE,
-      subscribedAt: new Date()
-    })
-    await subscriber.save()
+  subscribe = async (request: IRequest): Promise<string> => {
+    try {
+      const subscriber = await this._subscriberModel.findOne(request.args).exec()
 
-    return true
+      console.log(subscriber)
+      if (subscriber) {
+        return 'alreadySubscribed'
+      }
+
+      const newSubscriber = new this._subscriberModel({
+        email: request.args.email,
+        statusId: StatusEnum.ACTIVE,
+        subscribedAt: new Date()
+      })
+
+      await newSubscriber.save()
+
+      return 'success'
+    } catch (error) {
+      return 'failed'
+    }
   }
 }

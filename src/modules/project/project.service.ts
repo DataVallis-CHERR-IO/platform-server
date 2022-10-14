@@ -4,6 +4,7 @@ import { Model } from 'mongoose'
 import { Project } from './project.model'
 import { IRequest } from '../../interfaces/graphql/graphql.interface'
 import { StatusEnum } from '../../enums/status.enum'
+import * as moment from 'moment'
 
 @Injectable()
 export class ProjectService {
@@ -45,9 +46,14 @@ export class ProjectService {
    */
   create = async (request: IRequest): Promise<Project> => {
     try {
-      const project = new this._projectModel({ statusId: StatusEnum.ACTIVE, startedAt: new Date(), ...request.args })
+      const project = new this._projectModel({
+        statusId: StatusEnum.ACTIVE,
+        startedAt: new Date(),
+        endedAt: moment().add(1, 'weeks').toDate(),
+        ...request.args
+      })
 
-      return await project.save()
+      return project.save()
     } catch (error) {
       return null
     }

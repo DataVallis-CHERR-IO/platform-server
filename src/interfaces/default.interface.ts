@@ -16,3 +16,9 @@ export interface ITemplateConfig {
     accountVerification: string
   }
 }
+
+export interface IDatabaseDefaultProps {
+  _id?: string
+  createdAt?: string
+  updatedAt?: string
+}

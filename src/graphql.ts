@@ -19,45 +19,17 @@ export class Sort {
 }
 
 export abstract class IQuery {
-    abstract campaignDocuments(campaignId?: Nullable<string>): Nullable<Nullable<CampaignDocument>[]> | Promise<Nullable<Nullable<CampaignDocument>[]>>;
-
-    abstract campaignImages(campaignId?: Nullable<string>): Nullable<Nullable<CampaignImage>[]> | Promise<Nullable<Nullable<CampaignImage>[]>>;
-
     abstract projectDetail(projectId: string): ProjectDetail | Promise<ProjectDetail>;
+
+    abstract projectDocuments(projectId: string): Nullable<Nullable<ProjectDocument>[]> | Promise<Nullable<Nullable<ProjectDocument>[]>>;
+
+    abstract projectMedia(projectId: string): Nullable<Nullable<ProjectMedia>[]> | Promise<Nullable<Nullable<ProjectMedia>[]>>;
 
     abstract projectTypes(): Nullable<Nullable<ProjectType>[]> | Promise<Nullable<Nullable<ProjectType>[]>>;
 
     abstract projects(sort?: Nullable<Sort>, skip?: Nullable<number>, limit?: Nullable<number>): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
 
     abstract project(slug: string): Nullable<Project> | Promise<Nullable<Project>>;
-
-    abstract subscribers(): Nullable<Nullable<Subscriber>[]> | Promise<Nullable<Nullable<Subscriber>[]>>;
-}
-
-export class CampaignDocument {
-    _id?: Nullable<string>;
-    campaignId?: Nullable<string>;
-    title?: Nullable<string>;
-    path?: Nullable<string>;
-    icon?: Nullable<string>;
-    format?: Nullable<string>;
-    statusId?: Nullable<number>;
-    createdAt?: Nullable<string>;
-    updatedAt?: Nullable<string>;
-    deletedAt?: Nullable<string>;
-}
-
-export class CampaignImage {
-    _id?: Nullable<string>;
-    campaignId?: Nullable<string>;
-    title?: Nullable<string>;
-    description?: Nullable<string>;
-    path?: Nullable<string>;
-    image?: Nullable<string>;
-    statusId?: Nullable<number>;
-    createdAt?: Nullable<string>;
-    updatedAt?: Nullable<string>;
-    deletedAt?: Nullable<string>;
 }
 
 export abstract class IMutation {
@@ -65,7 +37,7 @@ export abstract class IMutation {
 
     abstract createProject(title: string, excerpt: string, slug: string, goal: number, image: string, contractAddress: string, statusId?: Nullable<number>, startedAt?: Nullable<string>): Project | Promise<Project>;
 
-    abstract subscribe(email?: Nullable<string>): Nullable<boolean> | Promise<Nullable<boolean>>;
+    abstract subscribe(email: string): string | Promise<string>;
 }
 
 export class ProjectDetail {
@@ -77,6 +49,32 @@ export class ProjectDetail {
     updatedAt?: Nullable<string>;
 }
 
+export class ProjectDocument {
+    _id?: Nullable<string>;
+    projectId?: Nullable<string>;
+    title?: Nullable<string>;
+    path?: Nullable<string>;
+    icon?: Nullable<string>;
+    format?: Nullable<string>;
+    statusId?: Nullable<number>;
+    createdAt?: Nullable<string>;
+    updatedAt?: Nullable<string>;
+    deletedAt?: Nullable<string>;
+}
+
+export class ProjectMedia {
+    _id?: Nullable<string>;
+    projectId?: Nullable<string>;
+    title?: Nullable<string>;
+    description?: Nullable<string>;
+    path?: Nullable<string>;
+    image?: Nullable<string>;
+    statusId?: Nullable<number>;
+    createdAt?: Nullable<string>;
+    updatedAt?: Nullable<string>;
+    deletedAt?: Nullable<string>;
+}
+
 export class ProjectType {
     _id?: Nullable<string>;
     name?: Nullable<string>;
@@ -85,7 +83,7 @@ export class ProjectType {
 }
 
 export abstract class ISubscription {
-    abstract projectCreated(): Nullable<Project> | Promise<Nullable<Project>>;
+    abstract projectCreated(): Project | Promise<Project>;
 }
 
 export class Project {
@@ -101,12 +99,6 @@ export class Project {
     endedAt?: Nullable<string>;
     createdAt?: Nullable<string>;
     updatedAt?: Nullable<string>;
-}
-
-export class Subscriber {
-    email?: Nullable<string>;
-    statusId?: Nullable<number>;
-    subscribedAt?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;

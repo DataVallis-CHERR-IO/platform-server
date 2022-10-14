@@ -29,8 +29,8 @@ export class ProjectResolver {
   @Query('project')
   async project(@Args() args: any, @Info() info): Promise<Project> {
     return this._projectService.getBy({
-      args,
-      select: getQuerySelections(info)
+      select: getQuerySelections(info),
+      args
     })
   }
 

@@ -1,5 +1,8 @@
-export interface Subscriber {
+import { IDatabaseDefaultProps } from '../../interfaces/default.interface'
+
+export interface Subscriber extends IDatabaseDefaultProps {
   email?: string
   statusId?: number
-  subscribedAt?: Date
+  subscribedAt?: string
+  unsubscribedAt?: string
 }

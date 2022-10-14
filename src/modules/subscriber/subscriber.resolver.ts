@@ -12,14 +12,9 @@ export class SubscriberResolver {
 
   @Public()
   @Mutation('subscribe')
-  async subscribe(@Args() args): Promise<any> {
-    await this._subscriberService.subscribe({
+  async subscribe(@Args() args): Promise<string> {
+    return this._subscriberService.subscribe({
       args
     })
-
-    return {
-      message: 'Account has been successfully created',
-      lkMessage: 'accountSignupSuccess'
-    }
   }
 }

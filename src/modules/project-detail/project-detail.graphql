@@ -1,9 +1,9 @@
 type Query {
-    projectDetail(projectId: ID!): ProjectDetail!
+    projectDetail(projectId: String!): ProjectDetail!
 }
 
 type Mutation {
-    createProjectDetail(projectId: ID!, description: String!, requirements: String): ProjectDetail!
+    createProjectDetail(projectId: String!, description: String!, requirements: String): ProjectDetail!
 }
 
 type ProjectDetail {

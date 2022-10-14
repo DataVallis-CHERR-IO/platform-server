@@ -32,7 +32,7 @@ export class ProjectDetailService {
     try {
       const projectDetail = new this._projectDetailModel(request.args)
 
-      return await projectDetail.save()
+      return projectDetail.save()
     } catch (error) {
       return null
     }

@@ -17,8 +17,8 @@ import { WinstonModule } from 'nest-winston'
 import { SubscriberModule } from './modules/subscriber/subscriber.module'
 import { ProjectModule } from './modules/project/project.module'
 import { ProjectDetailModule } from './modules/project-detail/project-detail.module'
-import { CampaignDocumentModule } from './modules/campaign-document/campaign-document.module'
-import { CampaignImageModule } from './modules/campaign-image/campaign-image.module'
+import { ProjectDocumentModule } from './modules/project-document/project-document.module'
+import { ProjectMediaModule } from './modules/project-media/project-media.module'
 import { ProjectTypeModule } from './modules/project-type/project-type.module'
 
 @Module({
@@ -53,11 +53,11 @@ import { ProjectTypeModule } from './modules/project-type/project-type.module'
     }),
     PassportModule,
     SubscriberModule,
-    ProjectModule,
     ProjectTypeModule,
+    ProjectModule,
     ProjectDetailModule,
-    CampaignDocumentModule,
-    CampaignImageModule
+    ProjectDocumentModule,
+    ProjectMediaModule
   ],
   controllers: [AppController],
   providers: [

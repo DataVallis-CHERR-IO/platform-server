@@ -1,14 +1,14 @@
 type Query {
-    campaignImages(campaignId: String): [CampaignImage]
+    projectDocuments(projectId: String!): [ProjectDocument]
 }
 
-type CampaignImage {
+type ProjectDocument {
     _id: String
-    campaignId: String
+    projectId: String
     title: String
-    description: String
     path: String
-    image: String
+    icon: String
+    format: String
     statusId: Int
     createdAt: String
     updatedAt: String

@@ -1,8 +1,7 @@
-export interface ProjectDetail {
-  _id?: string
+import { IDatabaseDefaultProps } from '../../interfaces/default.interface'
+
+export interface ProjectDetail extends IDatabaseDefaultProps {
   projectId?: string
   description?: string
   requirements?: string
-  createdAt?: string
-  updatedAt?: string
 }

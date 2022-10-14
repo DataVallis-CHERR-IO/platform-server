@@ -1,5 +1,6 @@
-export interface Project {
-  _id?: string
+import { IDatabaseDefaultProps } from '../../interfaces/default.interface'
+
+export interface Project extends IDatabaseDefaultProps {
   title?: string
   excerpt?: string
   slug?: string
@@ -9,6 +10,4 @@ export interface Project {
   statusId?: number
   startedAt?: string
   endedAt?: string
-  createdAt?: string
-  updatedAt?: string
 }
