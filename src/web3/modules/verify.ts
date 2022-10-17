@@ -13,8 +13,8 @@ async function verify() {
   try {
     console.log('Verifying contract...')
     await hre.run('verify:verify', {
-      address: '0xF7064e4771d38EA889De93750C7B0D9f3F4Fdd8A',
-      constructorArguments: ['0xEEB4Eb7942E4B64427f2Fd3f4a3a20fE5464Be1F']
+      address: '0xD72014F67c92716686406662e6a51a3dffC8772B',
+      constructorArguments: []
     })
   } catch (err) {
     console.log(err)

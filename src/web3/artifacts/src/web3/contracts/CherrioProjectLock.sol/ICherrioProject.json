@@ -1,24 +1,11 @@
 {
   "_format": "hh-sol-artifact-1",
-  "contractName": "ICherrioProjectTest",
+  "contractName": "ICherrioProject",
   "sourceName": "src/web3/contracts/CherrioProjectLock.sol",
   "abi": [
     {
       "inputs": [],
-      "name": "counter",
-      "outputs": [
-        {
-          "internalType": "uint8",
-          "name": "",
-          "type": "uint8"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "increment",
+      "name": "activate",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

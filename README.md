@@ -9,7 +9,7 @@ npx hardhat clean
 npx hardhat compile
 
 //publish SC
-npx hardhat run scripts/deployFundrasing.js --network mumbai
+npx hardhat run src/web3/modules/deploy.ts --network mumbai
 
 //verify SC
 npx hardhat verify {sc_address} --network mumbai

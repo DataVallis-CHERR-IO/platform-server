@@ -1,9 +1,9 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform/server/src/web3/contracts/CherrioProject.sol": {
-      "lastModificationDate": 1665643272646,
-      "contentHash": "909d2ebd3eaf952fbc9792e9ff7bc2c5",
+    "/Volumes/Data/Projects/Companies/DataVallis/Own/Projects/Cherrio/platform/server/src/web3/contracts/CherrioProject.sol": {
+      "lastModificationDate": 1665744721245,
+      "contentHash": "48b7f532eb981ee69abaa6b1d63ee243",
       "sourceName": "src/web3/contracts/CherrioProject.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -36,44 +36,9 @@
         "CherrioProject"
       ]
     },
-    "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform/server/src/web3/contracts/CherrioProjectTest.sol": {
-      "lastModificationDate": 1665736735654,
-      "contentHash": "7e605afba742e0a3e4aa1bcac2bd9fb9",
-      "sourceName": "src/web3/contracts/CherrioProjectTest.sol",
-      "solcConfig": {
-        "version": "0.8.9",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.9"
-      ],
-      "artifacts": [
-        "CherrioProjectTest"
-      ]
-    },
-    "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform/server/src/web3/contracts/CherrioProjectLock.sol": {
-      "lastModificationDate": 1665737543114,
-      "contentHash": "4e3762aed731f573244bdaefcee869af",
+    "/Volumes/Data/Projects/Companies/DataVallis/Own/Projects/Cherrio/platform/server/src/web3/contracts/CherrioProjectLock.sol": {
+      "lastModificationDate": 1665746766476,
+      "contentHash": "b800553ac7617020907f6c9b95e52472",
       "sourceName": "src/web3/contracts/CherrioProjectLock.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -104,7 +69,9 @@
       ],
       "artifacts": [
         "CherrioProjectLock",
-        "ICherrioProjectTest"
+        "ICherrioProject",
+        "Owner",
+        "SafeMath"
       ]
     }
   }

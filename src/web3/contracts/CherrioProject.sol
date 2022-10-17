@@ -9,6 +9,7 @@ contract CherrioProject {
     uint public goal;
     uint public raisedAmount = 0;
     address public admin;
+    Stages public stage;
 
     struct Request {
         string description;
@@ -19,10 +20,18 @@ contract CherrioProject {
         mapping(address => bool) voters;
     }
 
+    enum Stages {
+        Pending,
+        Active,
+        Ended,
+        Locked
+    }
+
     uint numRequests;
     mapping(uint => Request) requests;
 
     constructor(uint _deadline, uint _goal) {
+        stage = Stages.Pending;
         minimumContribution = 1000000;
         deadline = block.number + _deadline;
         goal = _goal;
@@ -31,6 +40,11 @@ contract CherrioProject {
 
     modifier onlyAdmin {
         require(msg.sender == admin);
+        _;
+    }
+
+    modifier atStage(Stages _expectedStage) {
+        require(stage == _expectedStage);
         _;
     }
 
@@ -43,7 +57,7 @@ contract CherrioProject {
         contribute();
     }
 
-    function contribute() public payable {
+    function contribute() public payable atStage(Stages.Active) {
         require(msg.value > minimumContribution);
         require(block.number < deadline);
 
@@ -68,6 +82,10 @@ contract CherrioProject {
 
         payable(msg.sender).transfer(contributions[msg.sender]);
         contributions[msg.sender] = 0;
+    }
+
+    function activate() external atStage(Stages.Pending) {
+        stage = Stages.Active;
     }
 
     function createSpendingRequest(string memory _description, address _recipient, uint _value) public onlyAdmin {
