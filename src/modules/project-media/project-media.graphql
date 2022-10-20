@@ -3,15 +3,17 @@ type Query {
 }
 
 type Mutation {
-    createProjectMedia(projectId: String!, title: String!, content: String!, mediaTypeId: Int!): ProjectMedia!
+    createProjectMedia(projectId: String!, type: String!, title: String!, format: String!, content: String!): Boolean!
 }
 
 type ProjectMedia {
     _id: String
     projectId: String
+    type: String
     title: String
     path: String
-    mediaTypeId: Int
+    format: String
+    icon: String
     statusId: Int
     createdAt: String
     updatedAt: String

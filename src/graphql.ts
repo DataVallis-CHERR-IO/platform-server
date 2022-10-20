@@ -35,11 +35,13 @@ export abstract class IQuery {
 export abstract class IMutation {
     abstract createProjectDetail(projectId: string, description: string, requirements?: Nullable<string>): ProjectDetail | Promise<ProjectDetail>;
 
-    abstract createProjectMedia(projectId: string, title: string, content: string, mediaTypeId: number): ProjectMedia | Promise<ProjectMedia>;
+    abstract createProjectMedia(projectId: string, type: string, title: string, format: string, content: string): boolean | Promise<boolean>;
 
     abstract createProject(title: string, excerpt: string, slug: string, goal: number, image: string, contractAddress: string, statusId?: Nullable<number>, startedAt?: Nullable<string>): Project | Promise<Project>;
 
     abstract subscribe(email: string): string | Promise<string>;
+
+    abstract upload(title: string, content: string): string | Promise<string>;
 }
 
 export class ProjectDetail {
@@ -67,9 +69,11 @@ export class ProjectDocument {
 export class ProjectMedia {
     _id?: Nullable<string>;
     projectId?: Nullable<string>;
+    type?: Nullable<string>;
     title?: Nullable<string>;
     path?: Nullable<string>;
-    mediaTypeId?: Nullable<number>;
+    format?: Nullable<string>;
+    icon?: Nullable<string>;
     statusId?: Nullable<number>;
     createdAt?: Nullable<string>;
     updatedAt?: Nullable<string>;

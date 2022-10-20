@@ -25,3 +25,12 @@ export interface IRequest {
   skip?: number
   limit?: number
 }
+
+export interface IUploadReq {
+  title: string
+  content: string
+}
+
+export interface IUploadRes {
+  path: string
+}

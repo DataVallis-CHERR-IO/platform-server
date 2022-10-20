@@ -22,3 +22,11 @@ export interface IDatabaseDefaultProps {
   createdAt?: string
   updatedAt?: string
 }
+
+export interface IIPFSHeaders {
+  headers: {
+    'X-API-KEY': string
+    'Content-Type': string
+    accept: string
+  }
+}

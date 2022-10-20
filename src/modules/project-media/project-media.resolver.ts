@@ -3,7 +3,6 @@ import { Public } from '../../decorators/public.decorator'
 import { ProjectMediaService } from './project-media.service'
 import { ProjectMedia } from './project-media.model'
 import { getQuerySelections } from '../../helpers/default.helper'
-import { Project } from '../project/project.model'
 
 @Resolver('ProjectMedia')
 export class ProjectMediaResolver {
@@ -24,7 +23,7 @@ export class ProjectMediaResolver {
 
   @Public()
   @Mutation('createProjectMedia')
-  async createProjectMedia(@Args() args: any): Promise<Project> {
+  async createProjectMedia(@Args() args: any): Promise<boolean> {
     return await this._projectMediaService.create({ args })
   }
 }

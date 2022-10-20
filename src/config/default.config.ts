@@ -1,8 +1,8 @@
-import { translate } from '../utils/translate'
 import Mail from 'nodemailer/lib/mailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
+import { translate } from '../utils/translate'
+import { IIPFSHeaders, ITemplateConfig } from '../interfaces/default.interface'
 import * as moment from 'moment'
-import { ITemplateConfig } from '../interfaces/default.interface'
 
 export const nodemailerConfig: SMTPTransport | SMTPTransport.Options | string = {
   host: process.env.MAILER_HOST,
@@ -30,5 +30,13 @@ export const templateConfig: ITemplateConfig = {
   email: {
     globalException: 'emails/global-exception',
     accountVerification: 'emails/account-verification'
+  }
+}
+
+export const ipfsHeaders: IIPFSHeaders = {
+  headers: {
+    'X-API-KEY': process.env.MORALIS_API_KEY,
+    'Content-Type': 'application/json',
+    accept: 'application/json'
   }
 }

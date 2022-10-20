@@ -2,12 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { ProjectMedia } from './project-media.model'
-import { IRequest } from '../../interfaces/graphql/graphql.interface'
-import { Project } from '../project/project.model'
+import { IUploadReq, IUploadRes, IRequest } from '../../interfaces/graphql/graphql.interface'
 import { StatusEnum } from '../../enums/status.enum'
-import * as moment from 'moment/moment'
 import { HttpService } from '@nestjs/axios'
-import { AxiosResponse } from 'axios'
+import { ipfsHeaders } from '../../config/default.config'
 
 @Injectable()
 export class ProjectMediaService {
@@ -32,47 +30,39 @@ export class ProjectMediaService {
   /**
    * @method create
    * @param {IRequest} request
-   * @returns {Promise<Project>}
+   * @returns {Promise<boolean>}
    */
-  create = async (request: IRequest): Promise<Project> => {
+  create = async (request: IRequest): Promise<boolean> => {
     try {
-      console.log(process.env.API_KEY)
-      console.log(process.env.MORALIS_API_KEY)
-      const resp = await this.upload(request.args.content.toString('base64'))
-      console.log(resp)
-      // console.log(request.args.content.slice(0, 30))
-      // console.log(request.args.content.slice(-30))
-      // const media = await upload(request.args.content)
-      // console.log(media)
-      // const projectMedia = new this._projectMediaModel({
-      //   statusId: StatusEnum.ACTIVE,
-      //   ...request.args
-      // })
-      //
-      // return projectMedia.save()
-      return null
+      const uploaded = await this.upload({
+        title: request.args.title,
+        content: request.args.content
+      })
+
+      const projectMedia = new this._projectMediaModel({
+        statusId: StatusEnum.ACTIVE,
+        path: uploaded[0].path,
+        ...request.args
+      })
+
+      await projectMedia.save()
+      return true
     } catch (error) {
-      console.log(error)
-      console.log(process.env.API_KEY)
-      // console.log(error)
-      return null
+      return false
     }
   }
-  upload = async (content): Promise<AxiosResponse<any>> => {
-    const ipfsArray = [];
-    ipfsArray.push({
-      path: `media/321321312`,
-      content,
-    })
-    return await this._httpService.axiosRef.post(
-      'https://deep-index.moralis.io/api/v2/ipfs/uploadFolder', ipfsArray,
-      {
-        headers: {
-          'X-API-KEY': process.env.MORALIS_API_KEY,
-          'Content-Type': 'application/json',
-          accept: 'application/json'
-        }
-      }
-    )
-  }
+
+  upload = async (upload: IUploadReq): Promise<IUploadRes[]> =>
+    (
+      await this._httpService.axiosRef.post(
+        process.env.IPFS_UPLOAD_URL,
+        [
+          {
+            path: `media/${upload.title}`,
+            content: upload.content
+          }
+        ],
+        { ...ipfsHeaders }
+      )
+    ).data
 }

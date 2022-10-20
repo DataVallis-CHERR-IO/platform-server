@@ -13,8 +13,7 @@ export const deploy = async () => {
     console.log('Contract deployed to:', contract.address)
     console.log('Waiting for 5 confirmations...')
     await contract.deployTransaction.wait(5)
-    const response = await verify(contract.address, constructorArguments)
-    console.log(response, 'response')
+    await verify(contract.address, constructorArguments)
   } catch (error) {
     console.log(error.message)
   }

@@ -10,10 +10,10 @@ contract CherrioProject {
     address public cherrioProjectActivator;
     uint256 public minimumDonation;
     uint256 public goal;
-    uint256 public raisedAmount = 0;
+    uint256 public raisedAmount;
+    uint256 public deadline;
     uint public totalDonors;
     uint public duration;
-    uint public deadline;
     Stages public stage;
     uint numRequests;
 
@@ -68,7 +68,7 @@ contract CherrioProject {
 
     function donate() public payable atStage(Stages.Active) {
         require(msg.value >= minimumDonation);
-        require(block.number <= deadline);
+        require(block.timestamp <= deadline);
 
         if (donations[msg.sender] == 0) {
             totalDonors++;
@@ -87,15 +87,15 @@ contract CherrioProject {
 
     function activate() external atStage(Stages.Pending) canActivate(msg.sender) {
         stage = Stages.Active;
-        deadline = block.number + duration;
+        deadline = block.timestamp + (duration * 1 days);
     }
 
-    function getBlockNumber() public view returns(uint256){
-        return block.number;
+    function getCurrentTime() public view returns(uint256){
+        return block.timestamp;
     }
 
     function getRefund() public {
-        require(block.number > deadline);
+        require(block.timestamp > deadline);
         require(raisedAmount <= goal);
         require(donations[msg.sender] > 0);
 

@@ -21,6 +21,7 @@ import { ProjectDetailModule } from './modules/project-detail/project-detail.mod
 import { ProjectDocumentModule } from './modules/project-document/project-document.module'
 import { ProjectMediaModule } from './modules/project-media/project-media.module'
 import { ProjectTypeModule } from './modules/project-type/project-type.module'
+import { UploadModule } from './modules/upload/upload.module'
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { ProjectTypeModule } from './modules/project-type/project-type.module'
       ]
     }),
     PassportModule,
+    UploadModule,
     SubscriberModule,
     ProjectTypeModule,
     ProjectModule,

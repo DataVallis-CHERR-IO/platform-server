@@ -5,8 +5,6 @@ import { Project } from './project.model'
 import { getQuerySelections } from '../../helpers/default.helper'
 import { PubSub } from 'graphql-subscriptions'
 
-// const pubSub = new PubSub()
-
 @Resolver('Project')
 export class ProjectResolver {
   /**
