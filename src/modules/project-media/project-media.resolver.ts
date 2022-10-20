@@ -1,8 +1,9 @@
-import { Args, Info, Query, Resolver } from '@nestjs/graphql'
+import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Public } from '../../decorators/public.decorator'
 import { ProjectMediaService } from './project-media.service'
 import { ProjectMedia } from './project-media.model'
 import { getQuerySelections } from '../../helpers/default.helper'
+import { Project } from '../project/project.model'
 
 @Resolver('ProjectMedia')
 export class ProjectMediaResolver {
@@ -19,5 +20,11 @@ export class ProjectMediaResolver {
       select: getQuerySelections(info),
       args
     })
+  }
+
+  @Public()
+  @Mutation('createProjectMedia')
+  async createProjectMedia(@Args() args: any): Promise<Project> {
+    return await this._projectMediaService.create({ args })
   }
 }

@@ -1,12 +1,12 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/Volumes/Data/Projects/Companies/DataVallis/Own/Projects/Cherrio/platform/server/src/web3/contracts/CherrioProject.sol": {
-      "lastModificationDate": 1665744721245,
-      "contentHash": "48b7f532eb981ee69abaa6b1d63ee243",
+    "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform/server/src/web3/contracts/CherrioProject.sol": {
+      "lastModificationDate": 1666249228318,
+      "contentHash": "c4bed647b5e8a5d7adcd00ae94af8a85",
       "sourceName": "src/web3/contracts/CherrioProject.sol",
       "solcConfig": {
-        "version": "0.8.9",
+        "version": "0.8.17",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -33,15 +33,16 @@
         "^0.8.9"
       ],
       "artifacts": [
-        "CherrioProject"
+        "CherrioProject",
+        "ICherrioProjectActivator"
       ]
     },
-    "/Volumes/Data/Projects/Companies/DataVallis/Own/Projects/Cherrio/platform/server/src/web3/contracts/CherrioProjectLock.sol": {
-      "lastModificationDate": 1665746766476,
-      "contentHash": "b800553ac7617020907f6c9b95e52472",
-      "sourceName": "src/web3/contracts/CherrioProjectLock.sol",
+    "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform/server/src/web3/contracts/CherrioProjectActivator.sol": {
+      "lastModificationDate": 1666253461218,
+      "contentHash": "3df1bc2467fa5a5f797e47d1c82cc76a",
+      "sourceName": "src/web3/contracts/CherrioProjectActivator.sol",
       "solcConfig": {
-        "version": "0.8.9",
+        "version": "0.8.17",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -65,13 +66,13 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.9"
+        "^0.8.17"
       ],
       "artifacts": [
-        "CherrioProjectLock",
+        "CherrioProjectActivator",
         "ICherrioProject",
-        "Owner",
-        "SafeMath"
+        "ICherrioToken",
+        "Owner"
       ]
     }
   }

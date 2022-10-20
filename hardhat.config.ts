@@ -12,10 +12,10 @@ const config = {
     cache: './src/web3/cache',
     sources: './src/web3/contracts'
   },
-  solidity: '0.8.9',
+  solidity: '0.8.17',
   networks: {
     mumbai: {
-      url: process.env.POLYGON_MUMBAI,
+      url: process.env.NETWORK_URL,
       accounts: [process.env.PRIVATE_KEY]
     }
   },
