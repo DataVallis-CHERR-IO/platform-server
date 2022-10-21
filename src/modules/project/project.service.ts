@@ -47,9 +47,7 @@ export class ProjectService {
   create = async (request: IRequest): Promise<Project> => {
     try {
       const project = new this._projectModel({
-        statusId: StatusEnum.ACTIVE,
-        startedAt: new Date(),
-        endedAt: moment().add(1, 'weeks').toDate(),
+        statusId: StatusEnum.PENDING,
         ...request.args
       })
 

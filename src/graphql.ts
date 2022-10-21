@@ -23,7 +23,7 @@ export abstract class IQuery {
 
     abstract projectDocuments(projectId: string): Nullable<Nullable<ProjectDocument>[]> | Promise<Nullable<Nullable<ProjectDocument>[]>>;
 
-    abstract projectMedia(projectId: string): Nullable<Nullable<ProjectMedia>[]> | Promise<Nullable<Nullable<ProjectMedia>[]>>;
+    abstract projectMedia(projectId: string, type?: Nullable<string>): Nullable<Nullable<ProjectMedia>[]> | Promise<Nullable<Nullable<ProjectMedia>[]>>;
 
     abstract projectTypes(): Nullable<Nullable<ProjectType>[]> | Promise<Nullable<Nullable<ProjectType>[]>>;
 

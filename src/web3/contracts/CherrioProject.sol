@@ -57,9 +57,9 @@ contract CherrioProject {
         duration = _duration;
         goal = _goal;
         stage = Stages.Pending;
-        minimumDonation = 0.001*(10**18);
-        admin = 0xAAe3b0B628E1b8918a0F0C648f5FAc3cDFe61C9e;
-        cherrioProjectActivator = 0x204F0FC6C58f05614ae3327a0389c81f25C08Ecb;
+        minimumDonation = 0.00000001*(10**18);
+        admin = 0x78b881eB26Db03B49239DB7cd7b2c92f95d9D63C;
+        cherrioProjectActivator = 0x296A3E98481077b01f13eA2e12602Eb955EA44aC;
     }
 
     receive() external payable {

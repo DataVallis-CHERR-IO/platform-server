@@ -5,6 +5,7 @@ import { parse } from 'graphql'
 import { sendMail } from '../handlers/nodemailer.handler'
 import { getRenderedTemplate } from '../helpers/default.helper'
 import { templateConfig } from '../config/default.config'
+import * as stringify from 'json-stringify-safe'
 import * as _ from 'lodash'
 
 @Catch()
@@ -34,14 +35,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const status = typeof exception === 'function' ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR
     const data = {
       message,
-      context: JSON.stringify(context),
+      context: stringify(context),
       query,
       queryObject
     }
 
     await sendMail(process.env.MAILER_TO, getRenderedTemplate(templateConfig.email.globalException, data))
 
-    this._logger.error(JSON.stringify(data))
+    this._logger.error(stringify(data))
 
     throw new ErrorException({ message, lkMessage }, status)
   }

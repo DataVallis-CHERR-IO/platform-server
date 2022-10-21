@@ -7,9 +7,9 @@ export const ProjectSchema = new Mongoose.Schema({
   slug: { type: String, required: true },
   image: { type: String, required: true },
   goal: { type: Number, required: true },
-  contractAddress: { type: String, required: false },
+  contractAddress: { type: String, required: true },
   statusId: { type: Number, required: true },
-  startedAt: { type: Date, required: true },
+  startedAt: { type: Date, required: false },
   endedAt: { type: Date, required: false },
   createdAt: { type: Date, required: true, default: Date.now() },
   updatedAt: { type: Date, required: false }

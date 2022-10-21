@@ -1,5 +1,5 @@
 type Query {
-    projectMedia(projectId: String!): [ProjectMedia]
+    projectMedia(projectId: String!, type: String): [ProjectMedia]
 }
 
 type Mutation {
