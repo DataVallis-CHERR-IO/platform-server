@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.17;
 
 interface ICherrioProjectActivator {
     function sendReward() external;
@@ -9,9 +9,10 @@ contract CherrioProject {
     address public admin;
     address public cherrioProjectActivator;
     uint256 public minimumDonation;
+    uint256 public startedAt;
+    uint256 public endedAt;
     uint256 public goal;
     uint256 public raisedAmount;
-    uint256 public deadline;
     uint public totalDonors;
     uint public duration;
     Stages public stage;
@@ -51,7 +52,8 @@ contract CherrioProject {
         _;
     }
 
-    event Donate(address donor, uint256 amount);
+    event Donation(address donor, uint256 amount);
+    event StageChanged(Stages stage);
 
     constructor(uint _duration, uint256 _goal) {
         duration = _duration;
@@ -59,7 +61,7 @@ contract CherrioProject {
         stage = Stages.Pending;
         minimumDonation = 0.00000001*(10**18);
         admin = 0x78b881eB26Db03B49239DB7cd7b2c92f95d9D63C;
-        cherrioProjectActivator = 0x296A3E98481077b01f13eA2e12602Eb955EA44aC;
+        cherrioProjectActivator = 0x7442311a691B65191648e27A71b05F398cf06A8B;
     }
 
     receive() external payable {
@@ -68,7 +70,7 @@ contract CherrioProject {
 
     function donate() public payable atStage(Stages.Active) {
         require(msg.value >= minimumDonation);
-        require(block.timestamp <= deadline);
+        require(block.timestamp <= endedAt);
 
         if (donations[msg.sender] == 0) {
             totalDonors++;
@@ -77,17 +79,22 @@ contract CherrioProject {
         donations[msg.sender] += msg.value;
         raisedAmount += msg.value;
 
+        emit Donation(msg.sender, msg.value);
+
         if (raisedAmount >= goal) {
             stage = Stages.Ended;
             ICherrioProjectActivator(cherrioProjectActivator).sendReward();
-        }
 
-        emit Donate(msg.sender, msg.value);
+            emit StageChanged(stage);
+        }
     }
 
     function activate() external atStage(Stages.Pending) canActivate(msg.sender) {
         stage = Stages.Active;
-        deadline = block.timestamp + (duration * 1 days);
+        startedAt = block.timestamp;
+        endedAt = startedAt + (duration * 1 days);
+
+        emit StageChanged(stage);
     }
 
     function getCurrentTime() public view returns(uint256){
@@ -95,7 +102,7 @@ contract CherrioProject {
     }
 
     function getRefund() public {
-        require(block.timestamp > deadline);
+        require(block.timestamp > endedAt);
         require(raisedAmount <= goal);
         require(donations[msg.sender] > 0);
 

@@ -3,8 +3,6 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { Project } from './project.model'
 import { IRequest } from '../../interfaces/graphql/graphql.interface'
-import { StatusEnum } from '../../enums/status.enum'
-import * as moment from 'moment'
 
 @Injectable()
 export class ProjectService {
@@ -46,12 +44,7 @@ export class ProjectService {
    */
   create = async (request: IRequest): Promise<Project> => {
     try {
-      const project = new this._projectModel({
-        statusId: StatusEnum.PENDING,
-        ...request.args
-      })
-
-      return project.save()
+      return new this._projectModel(request.args).save()
     } catch (error) {
       return null
     }

@@ -14,6 +14,7 @@ export const deploy = async () => {
     console.log('Waiting for 5 confirmations...')
     await contract.deployTransaction.wait(5)
     await verify(contract.address, constructorArguments)
+    console.log('Successfully deployed and verified')
   } catch (error) {
     console.log(error.message)
   }

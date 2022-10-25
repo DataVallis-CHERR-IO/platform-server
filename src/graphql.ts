@@ -18,10 +18,22 @@ export class Sort {
     orderDirection?: Nullable<OrderDirection>;
 }
 
+export abstract class IMutation {
+    abstract newProject(contractAddress: string, goal: number): boolean | Promise<boolean>;
+
+    abstract createProjectDetail(projectId: string, description: string, requirements?: Nullable<string>): ProjectDetail | Promise<ProjectDetail>;
+
+    abstract createProjectMedia(projectId: string, type: string, title: string, format: string, content: string): boolean | Promise<boolean>;
+
+    abstract createProject(title: string, excerpt: string, slug: string, image: string, contractAddress: string): Project | Promise<Project>;
+
+    abstract subscribe(email: string): string | Promise<string>;
+
+    abstract upload(title: string, content: string): string | Promise<string>;
+}
+
 export abstract class IQuery {
     abstract projectDetail(projectId: string): ProjectDetail | Promise<ProjectDetail>;
-
-    abstract projectDocuments(projectId: string): Nullable<Nullable<ProjectDocument>[]> | Promise<Nullable<Nullable<ProjectDocument>[]>>;
 
     abstract projectMedia(projectId: string, type?: Nullable<string>): Nullable<Nullable<ProjectMedia>[]> | Promise<Nullable<Nullable<ProjectMedia>[]>>;
 
@@ -32,18 +44,6 @@ export abstract class IQuery {
     abstract project(slug: string): Nullable<Project> | Promise<Nullable<Project>>;
 }
 
-export abstract class IMutation {
-    abstract createProjectDetail(projectId: string, description: string, requirements?: Nullable<string>): ProjectDetail | Promise<ProjectDetail>;
-
-    abstract createProjectMedia(projectId: string, type: string, title: string, format: string, content: string): boolean | Promise<boolean>;
-
-    abstract createProject(title: string, excerpt: string, slug: string, goal: number, image: string, contractAddress: string, statusId?: Nullable<number>, startedAt?: Nullable<string>): Project | Promise<Project>;
-
-    abstract subscribe(email: string): string | Promise<string>;
-
-    abstract upload(title: string, content: string): string | Promise<string>;
-}
-
 export class ProjectDetail {
     _id?: Nullable<string>;
     projectId?: Nullable<string>;
@@ -51,19 +51,6 @@ export class ProjectDetail {
     requirements?: Nullable<string>;
     createdAt?: Nullable<string>;
     updatedAt?: Nullable<string>;
-}
-
-export class ProjectDocument {
-    _id?: Nullable<string>;
-    projectId?: Nullable<string>;
-    title?: Nullable<string>;
-    path?: Nullable<string>;
-    icon?: Nullable<string>;
-    format?: Nullable<string>;
-    statusId?: Nullable<number>;
-    createdAt?: Nullable<string>;
-    updatedAt?: Nullable<string>;
-    deletedAt?: Nullable<string>;
 }
 
 export class ProjectMedia {
@@ -96,13 +83,7 @@ export class Project {
     excerpt?: Nullable<string>;
     slug?: Nullable<string>;
     image?: Nullable<string>;
-    goal?: Nullable<number>;
     contractAddress?: Nullable<string>;
-    statusId?: Nullable<number>;
-    startedAt?: Nullable<string>;
-    endedAt?: Nullable<string>;
-    createdAt?: Nullable<string>;
-    updatedAt?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;

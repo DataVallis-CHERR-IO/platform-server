@@ -4,7 +4,7 @@ type Query {
 }
 
 type Mutation {
-    createProject(title: String!, excerpt: String!, slug: String!, goal: Float!, image: String!, contractAddress: String!, statusId: Int, startedAt: String): Project!
+    createProject(title: String!, excerpt: String!, slug: String!, image: String!, contractAddress: String!): Project!
 }
 
 type Subscription {
@@ -17,13 +17,7 @@ type Project {
     excerpt: String
     slug: String
     image: String
-    goal: Float
     contractAddress: String
-    statusId: Int
-    startedAt: String
-    endedAt: String
-    createdAt: String
-    updatedAt: String
 }
 
 input Sort {

@@ -5,9 +5,5 @@ export interface Project extends IDatabaseDefaultProps {
   excerpt?: string
   slug?: string
   image?: string
-  goal?: number
   contractAddress?: string
-  statusId?: number
-  startedAt?: string
-  endedAt?: string
 }

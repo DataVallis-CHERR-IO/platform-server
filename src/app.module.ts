@@ -14,14 +14,15 @@ import { JwtStrategy } from './strategies/jwt.strategy'
 import { PassportModule } from '@nestjs/passport'
 import { GlobalExceptionFilter } from './filters/global-exception.filter'
 import { WinstonModule } from 'nest-winston'
-import { HttpModule, HttpService } from '@nestjs/axios'
 import { SubscriberModule } from './modules/subscriber/subscriber.module'
 import { ProjectModule } from './modules/project/project.module'
 import { ProjectDetailModule } from './modules/project-detail/project-detail.module'
-import { ProjectDocumentModule } from './modules/project-document/project-document.module'
 import { ProjectMediaModule } from './modules/project-media/project-media.module'
 import { ProjectTypeModule } from './modules/project-type/project-type.module'
 import { UploadModule } from './modules/upload/upload.module'
+import {
+  ContractCherrioProjectActivatorModule
+} from './modules/contracts/contract-cherrio-project-activator/contract-cherrio-project-activator.module'
 
 @Module({
   imports: [
@@ -59,8 +60,8 @@ import { UploadModule } from './modules/upload/upload.module'
     ProjectTypeModule,
     ProjectModule,
     ProjectDetailModule,
-    ProjectDocumentModule,
-    ProjectMediaModule
+    ProjectMediaModule,
+    ContractCherrioProjectActivatorModule
   ],
   controllers: [AppController],
   providers: [
