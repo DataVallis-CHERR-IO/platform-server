@@ -4,6 +4,7 @@ import { GraphqlAuthGuard } from './guards/graphql-auth.guard'
 import { GlobalExceptionFilter } from './filters/global-exception.filter'
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 import { Logger } from '@nestjs/common'
+import { TimeoutInterceptor } from './interceptors/timeout.interceptor'
 import * as bodyParser from 'body-parser'
 
 async function bootstrap() {
@@ -12,6 +13,7 @@ async function bootstrap() {
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER))
   app.useGlobalGuards(new GraphqlAuthGuard(app.get(Reflector)))
   app.useGlobalFilters(new GlobalExceptionFilter(app.get(Logger)))
+  app.useGlobalInterceptors(new TimeoutInterceptor())
   app.use(bodyParser.json({ limit: '50mb' }))
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 

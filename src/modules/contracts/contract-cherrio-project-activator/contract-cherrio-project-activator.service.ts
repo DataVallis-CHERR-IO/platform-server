@@ -12,10 +12,11 @@ export class ContractCherrioProjectActivatorService {
    */
   newProject = async (args: any): Promise<boolean> => {
     try {
-      console.log(args)
       return method('newProject', [
         args.contractAddress,
-        ethers.utils.parseUnits(args.goal.toString(), 'ether').toString(),
+        ethers.utils
+          .parseUnits(((Number(args.goal) * Number(process.env.CONTRACT_CHERRIO_PROJECT_ACTIVATOR_ACTIVATION_PERCENTAGE)) / 100).toString(), 'ether')
+          .toString(),
         Number(process.env.CONTRACT_CHERRIO_PROJECT_ACTIVATOR_NUM_ACTIVATORS),
         StatusEnum.ACTIVE
       ])

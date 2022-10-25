@@ -20,7 +20,7 @@ contract CherrioProject {
 
     struct Request {
         string description;
-        uint value;
+        uint256 value;
         address recipient;
         bool completed;
         uint numberOfVoters;
@@ -52,8 +52,12 @@ contract CherrioProject {
         _;
     }
 
-    event Donation(address donor, uint256 amount);
-    event StageChanged(Stages stage);
+    event Donation(address donor, uint256 value);
+    event ProjectActivated(uint256 startedAt, uint256 endedAt);
+    event ProjectEnded();
+    event CreateSpendingRequest(string description, address recipient, uint256 value);
+    event VoteForRequest(uint index, uint numberOfVoters);
+    event MakePayment(uint index, uint256 value);
 
     constructor(uint _duration, uint256 _goal) {
         duration = _duration;
@@ -61,7 +65,7 @@ contract CherrioProject {
         stage = Stages.Pending;
         minimumDonation = 0.00000001*(10**18);
         admin = 0x78b881eB26Db03B49239DB7cd7b2c92f95d9D63C;
-        cherrioProjectActivator = 0x7442311a691B65191648e27A71b05F398cf06A8B;
+        cherrioProjectActivator = 0x189F0Ba9bbe1cE0Db38427b8B1bBB199D8dBd1dF;
     }
 
     receive() external payable {
@@ -85,7 +89,7 @@ contract CherrioProject {
             stage = Stages.Ended;
             ICherrioProjectActivator(cherrioProjectActivator).sendReward();
 
-            emit StageChanged(stage);
+            emit ProjectEnded();
         }
     }
 
@@ -94,7 +98,7 @@ contract CherrioProject {
         startedAt = block.timestamp;
         endedAt = startedAt + (duration * 1 days);
 
-        emit StageChanged(stage);
+        emit ProjectActivated(startedAt, endedAt);
     }
 
     function getCurrentTime() public view returns(uint256){
@@ -110,13 +114,19 @@ contract CherrioProject {
         donations[msg.sender] = 0;
     }
 
-    function createSpendingRequest(string memory _description, address _recipient, uint _value) public isAdmin {
+    function setMinimumDonation(uint _value) public isAdmin{
+        minimumDonation = _value*(10**18);
+    }
+
+    function createSpendingRequest(string memory _description, address _recipient, uint256 _value) public isAdmin {
         Request storage r = requests[numRequests++];
         r.description = _description;
-        r.value = _value;
         r.recipient = _recipient;
+        r.value = _value;
         r.numberOfVoters = 0;
         r.completed = false;
+
+        emit CreateSpendingRequest(_description, _recipient, _value);
     }
 
     function voteForRequest(uint index) public {
@@ -126,6 +136,8 @@ contract CherrioProject {
 
         request.voters[msg.sender] = true;
         request.numberOfVoters++;
+
+        emit VoteForRequest(index, request.numberOfVoters);
     }
 
     function makePayment(uint index) public isAdmin {
@@ -135,5 +147,7 @@ contract CherrioProject {
         //more than 50% voted
         payable(request.recipient).transfer(request.value);
         request.completed = true;
+
+        emit MakePayment(index, request.value);
     }
 }

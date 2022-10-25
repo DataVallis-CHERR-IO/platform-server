@@ -60,7 +60,6 @@ interface ICherrioToken {
 
 contract CherrioProjectActivator is Owner {
     ICherrioToken public token;
-    uint256 public pool;
     uint256 public reward = 150; // 1.5%
 
     struct Project {
@@ -70,6 +69,7 @@ contract CherrioProjectActivator is Owner {
         uint256 numActivators;
         uint256 activateSize;
         uint256 activatedAmount;
+        uint256 reward;
         mapping(address => uint256) activators;
     }
 
@@ -87,8 +87,11 @@ contract CherrioProjectActivator is Owner {
         _;
     }
 
-    event ActivateProject(address indexed project, address activator, uint256 amount);
+    event ActivateProject(address indexed project, address activator, uint256 value);
+    event ProjectActivated(address indexed project);
+    event NewActivator(address indexed project, address activator);
     event NewProject(address indexed project, uint256 activateSize, uint256 numActivators, Stages stage);
+    event SendRefundAndReward(address indexed project);
 
     constructor() {
         token = ICherrioToken(0xC4Ee5dD245972F842DC76fCF5FccbCf4a6DB32ee);
@@ -103,17 +106,18 @@ contract CherrioProjectActivator is Owner {
         projects[_address].numActivators = _numActivators;
         projects[_address].activateSize = _activateSize;
         projects[_address].activatedAmount = 0;
+        projects[_address].reward = (_activateSize*reward)/10000;
 
         emit NewProject(_address, _activateSize, _numActivators, _stage);
     }
 
     function activateProject(address _address) public payable isProject(_address) {
-//        require(token.transferFrom(msg.sender, address(this), _amount));
         require(projects[_address].stage == Stages.Active);
-        require(msg.value <= (projects[_address].activateSize / projects[_address].numActivators));
+        require(projects[_address].activators[msg.sender] + msg.value <= (projects[_address].activateSize / projects[_address].numActivators));
 
         if (projects[_address].activators[msg.sender] == 0) {
             _activators[_address].push(msg.sender);
+            emit NewActivator(_address, msg.sender);
         }
 
         projects[_address].activators[msg.sender] += msg.value;
@@ -123,6 +127,7 @@ contract CherrioProjectActivator is Owner {
             projects[_address].stage = Stages.Ended;
 
             ICherrioProject(_address).activate();
+            emit ProjectActivated(_address);
         }
 
         emit ActivateProject(_address, msg.sender, msg.value);
@@ -152,10 +157,12 @@ contract CherrioProjectActivator is Owner {
 
         for(uint256 i = 0; i < numOfActivators; i++) {
             payable(_activators[_address][i]).transfer(project.activators[_activators[_address][i]]);
-            token.transfer(_activators[_address][i], ((project.activators[_activators[_address][i]])*reward/100)/100);
+            token.transfer(_activators[_address][i], ((100*project.activators[_activators[_address][i]])/100)/100*project.reward);
         }
 
         project.rewarded = true;
+
+        emit SendRefundAndReward(_address);
     }
 
     function getBalance() external view returns(uint256 _balance) {

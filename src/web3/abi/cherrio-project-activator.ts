@@ -5,9 +5,18 @@ export const getCherrioProjectActivatorAbi = (): any[] => [
     inputs: [
       { indexed: true, internalType: 'address', name: 'project', type: 'address' },
       { indexed: false, internalType: 'address', name: 'activator', type: 'address' },
-      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' }
+      { indexed: false, internalType: 'uint256', name: 'value', type: 'uint256' }
     ],
     name: 'ActivateProject',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'address', name: 'project', type: 'address' },
+      { indexed: false, internalType: 'address', name: 'activator', type: 'address' }
+    ],
+    name: 'NewActivator',
     type: 'event'
   },
   {
@@ -30,6 +39,8 @@ export const getCherrioProjectActivatorAbi = (): any[] => [
     name: 'OwnerSet',
     type: 'event'
   },
+  { anonymous: false, inputs: [{ indexed: true, internalType: 'address', name: 'project', type: 'address' }], name: 'ProjectActivated', type: 'event' },
+  { anonymous: false, inputs: [{ indexed: true, internalType: 'address', name: 'project', type: 'address' }], name: 'SendRefundAndReward', type: 'event' },
   {
     inputs: [{ internalType: 'address', name: '_address', type: 'address' }],
     name: 'activateProject',
@@ -75,7 +86,6 @@ export const getCherrioProjectActivatorAbi = (): any[] => [
     stateMutability: 'nonpayable',
     type: 'function'
   },
-  { inputs: [], name: 'pool', outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }], stateMutability: 'view', type: 'function' },
   {
     inputs: [{ internalType: 'address', name: '', type: 'address' }],
     name: 'projects',
@@ -85,7 +95,8 @@ export const getCherrioProjectActivatorAbi = (): any[] => [
       { internalType: 'bool', name: 'rewarded', type: 'bool' },
       { internalType: 'uint256', name: 'numActivators', type: 'uint256' },
       { internalType: 'uint256', name: 'activateSize', type: 'uint256' },
-      { internalType: 'uint256', name: 'activatedAmount', type: 'uint256' }
+      { internalType: 'uint256', name: 'activatedAmount', type: 'uint256' },
+      { internalType: 'uint256', name: 'reward', type: 'uint256' }
     ],
     stateMutability: 'view',
     type: 'function'
