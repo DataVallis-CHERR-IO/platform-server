@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform/server/src/web3/contracts/CherrioProject.sol": {
-      "lastModificationDate": 1666693976891,
-      "contentHash": "0a10eff543374cb55744753650529120",
+      "lastModificationDate": 1666766544967,
+      "contentHash": "2bc8e6f28bb4a6b6d962396a5055950b",
       "sourceName": "src/web3/contracts/CherrioProject.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -34,12 +34,13 @@
       ],
       "artifacts": [
         "CherrioProject",
-        "ICherrioProjectActivator"
+        "ICherrioProjectActivator",
+        "Owner"
       ]
     },
     "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform/server/src/web3/contracts/CherrioProjectActivator.sol": {
-      "lastModificationDate": 1666691840939,
-      "contentHash": "d3cc45739944b82ad84317003e36a15e",
+      "lastModificationDate": 1666738489362,
+      "contentHash": "8bc5c47645de10c4737b41f9015f79b1",
       "sourceName": "src/web3/contracts/CherrioProjectActivator.sol",
       "solcConfig": {
         "version": "0.8.17",

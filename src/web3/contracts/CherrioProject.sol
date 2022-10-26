@@ -1,22 +1,71 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
+/**
+ * @title Owner
+ * @dev Set & change owner
+ */
+contract Owner {
+    address private owner;
+
+    // event for EVM logging
+    event OwnerSet(address indexed oldOwner, address indexed newOwner);
+
+    // modifier to check if caller is owner
+    modifier isOwner() {
+        // If the first argument of 'require' evaluates to 'false', execution terminates and all
+        // changes to the state and to Ether balances are reverted.
+        // This used to consume all gas in old EVM versions, but not anymore.
+        // It is often a good idea to use 'require' to check if functions are called correctly.
+        // As a second argument, you can also provide an explanation about what went wrong.
+        require(msg.sender == owner, "Caller is not owner");
+        _;
+    }
+
+    /**
+     * @dev Set contract deployer as owner
+     */
+    constructor() {
+        owner = msg.sender; // 'msg.sender' is sender of current call, contract deployer for a constructor
+        emit OwnerSet(address(0), owner);
+    }
+
+    /**
+     * @dev Change owner
+     * @param newOwner address of new owner
+     */
+    function changeOwner(address newOwner) public isOwner {
+        emit OwnerSet(owner, newOwner);
+        owner = newOwner;
+    }
+
+    /**
+     * @dev Return owner address
+     * @return address of owner
+     */
+    function getOwner() external view returns (address) {
+        return owner;
+    }
+}
+
 interface ICherrioProjectActivator {
     function sendReward() external;
 }
 
-contract CherrioProject {
+contract CherrioProject is Owner {
     address public admin;
     address public cherrioProjectActivator;
     uint256 public minimumDonation;
     uint256 public startedAt;
+    uint256 public deadline;
     uint256 public endedAt;
     uint256 public goal;
     uint256 public raisedAmount;
+    uint public totalDonations;
     uint public totalDonors;
     uint public duration;
     Stages public stage;
-    uint numRequests;
+    uint public numRequests;
 
     struct Request {
         string description;
@@ -35,7 +84,7 @@ contract CherrioProject {
     }
 
     mapping(address => uint256) public donations;
-    mapping(uint => Request) requests;
+    mapping(uint => Request) public requests;
 
     modifier isAdmin {
         require(msg.sender == admin);
@@ -53,7 +102,7 @@ contract CherrioProject {
     }
 
     event Donation(address donor, uint256 value);
-    event ProjectActivated(uint256 startedAt, uint256 endedAt);
+    event ProjectActivated(uint256 startedAt, uint256 deadline);
     event ProjectEnded();
     event CreateSpendingRequest(string description, address recipient, uint256 value);
     event VoteForRequest(uint index, uint numberOfVoters);
@@ -63,9 +112,9 @@ contract CherrioProject {
         duration = _duration;
         goal = _goal;
         stage = Stages.Pending;
-        minimumDonation = 0.00000001*(10**18);
+        minimumDonation = 0.00001*(10**18);
         admin = 0x78b881eB26Db03B49239DB7cd7b2c92f95d9D63C;
-        cherrioProjectActivator = 0x189F0Ba9bbe1cE0Db38427b8B1bBB199D8dBd1dF;
+        cherrioProjectActivator = 0x3529B75B11A68276418bf4daaEB7f6ADD5852798;
     }
 
     receive() external payable {
@@ -74,7 +123,7 @@ contract CherrioProject {
 
     function donate() public payable atStage(Stages.Active) {
         require(msg.value >= minimumDonation);
-        require(block.timestamp <= endedAt);
+        require(block.timestamp <= deadline);
 
         if (donations[msg.sender] == 0) {
             totalDonors++;
@@ -82,11 +131,13 @@ contract CherrioProject {
 
         donations[msg.sender] += msg.value;
         raisedAmount += msg.value;
+        totalDonations++;
 
         emit Donation(msg.sender, msg.value);
 
         if (raisedAmount >= goal) {
             stage = Stages.Ended;
+            endedAt = block.timestamp;
             ICherrioProjectActivator(cherrioProjectActivator).sendReward();
 
             emit ProjectEnded();
@@ -96,9 +147,9 @@ contract CherrioProject {
     function activate() external atStage(Stages.Pending) canActivate(msg.sender) {
         stage = Stages.Active;
         startedAt = block.timestamp;
-        endedAt = startedAt + (duration * 1 days);
+        deadline = startedAt + (duration * 1 days);
 
-        emit ProjectActivated(startedAt, endedAt);
+        emit ProjectActivated(startedAt, deadline);
     }
 
     function getCurrentTime() public view returns(uint256){
@@ -118,7 +169,7 @@ contract CherrioProject {
         minimumDonation = _value*(10**18);
     }
 
-    function createSpendingRequest(string memory _description, address _recipient, uint256 _value) public isAdmin {
+    function createSpendingRequest(string memory _description, address _recipient, uint256 _value) public isOwner {
         Request storage r = requests[numRequests++];
         r.description = _description;
         r.recipient = _recipient;
@@ -143,11 +194,35 @@ contract CherrioProject {
     function makePayment(uint index) public isAdmin {
         Request storage request = requests[index];
         require(request.completed == false);
-        require(request.numberOfVoters > totalDonors / 2);
-        //more than 50% voted
+        require(request.numberOfVoters >= totalDonors / 2);
+        //more or equal than 50% voted
         payable(request.recipient).transfer(request.value);
         request.completed = true;
 
         emit MakePayment(index, request.value);
+    }
+
+    function getRequests() public view returns (string[] memory descriptions, uint256[] memory amounts, address[] memory recipients, bool[] memory completed, uint[] memory numberOfVoters){
+        string[] memory description = new string[](numRequests);
+        uint256[] memory value = new uint256[](numRequests);
+        address[] memory recipient = new address[](numRequests);
+        bool[] memory complete = new bool[](numRequests);
+        uint[] memory voters = new uint[](numRequests);
+
+        for (uint i = 0; i < numRequests; i++) {
+            Request storage request = requests[i];
+            description[i] = request.description;
+            value[i] = request.value;
+            recipient[i] = request.recipient;
+            complete[i] = request.completed;
+            voters[i] = request.numberOfVoters;
+        }
+        return (description, value, recipient, complete, voters);
+    }
+
+    function getRequest(uint index) public view returns (string memory description, uint256 amount, address recipient, bool completed, uint numberOfVoters){
+        Request storage request = requests[index];
+
+        return (request.description, request.value, request.recipient, request.completed, request.numberOfVoters);
     }
 }

@@ -20,9 +20,7 @@ import { ProjectDetailModule } from './modules/project-detail/project-detail.mod
 import { ProjectMediaModule } from './modules/project-media/project-media.module'
 import { ProjectTypeModule } from './modules/project-type/project-type.module'
 import { UploadModule } from './modules/upload/upload.module'
-import {
-  ContractCherrioProjectActivatorModule
-} from './modules/contracts/contract-cherrio-project-activator/contract-cherrio-project-activator.module'
+import { ContractCherrioProjectActivatorModule } from './modules/contracts/contract-cherrio-project-activator/contract-cherrio-project-activator.module'
 
 @Module({
   imports: [

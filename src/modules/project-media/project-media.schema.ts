@@ -10,5 +10,5 @@ export const ProjectMediaSchema = new Mongoose.Schema({
   icon: { type: String, required: false },
   statusId: { type: Number, required: true },
   createdAt: { type: Date, required: true, default: Date.now() },
-  updatedAt: { type: Date, required: false },
+  updatedAt: { type: Date, required: false }
 })

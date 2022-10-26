@@ -157,7 +157,7 @@ contract CherrioProjectActivator is Owner {
 
         for(uint256 i = 0; i < numOfActivators; i++) {
             payable(_activators[_address][i]).transfer(project.activators[_activators[_address][i]]);
-            token.transfer(_activators[_address][i], ((100*project.activators[_activators[_address][i]])/100)/100*project.reward);
+            token.transfer(payable(_activators[_address][i]), ((100*project.activators[_activators[_address][i]])/project.activatedAmount)/100*project.reward);
         }
 
         project.rewarded = true;
