@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.11;
 
 /**
  * @title Owner
@@ -61,6 +61,7 @@ interface ICherrioToken {
 contract CherrioProjectActivator is Owner {
     ICherrioToken public token;
     uint256 public reward = 150; // 1.5%
+    address[] public projectAddresses;
 
     struct Project {
         Stages stage;
@@ -93,8 +94,9 @@ contract CherrioProjectActivator is Owner {
     event NewProject(address indexed project, uint256 activateSize, uint256 numActivators, Stages stage);
     event SendRefundAndReward(address indexed project);
 
-    constructor() {
-        token = ICherrioToken(0xC4Ee5dD245972F842DC76fCF5FccbCf4a6DB32ee);
+    constructor(uint256 _cherrioTokenAddress) {
+        // CHERRIO TOKEN: TWrRd9bhran4gLYFeXLHFsbGtd8caFKhdE
+        token = ICherrioToken(_convertFromTronInt(_cherrioTokenAddress));
     }
 
     function newProject(address _address, uint256 _activateSize, uint256 _numActivators, Stages _stage) external isOwner {
@@ -107,11 +109,12 @@ contract CherrioProjectActivator is Owner {
         projects[_address].activateSize = _activateSize;
         projects[_address].activatedAmount = 0;
         projects[_address].reward = (_activateSize*reward)/10000;
+        projectAddresses.push(_address);
 
         emit NewProject(_address, _activateSize, _numActivators, _stage);
     }
 
-    function activateProject(address _address) public payable isProject(_address) {
+    function activateProject(address _address) external payable isProject(_address) {
         require(projects[_address].stage == Stages.Active);
         require(projects[_address].activators[msg.sender] + msg.value <= (projects[_address].activateSize / projects[_address].numActivators));
 
@@ -133,12 +136,38 @@ contract CherrioProjectActivator is Owner {
         emit ActivateProject(_address, msg.sender, msg.value);
     }
 
-    function getActivators(address _address) public view isProject(_address) returns(address[] memory activators) {
+    function getActivators(address _address) external view isProject(_address) returns(address[] memory activators) {
         return _activators[_address];
     }
 
     function getActivatedAmount(address _address, address _activator) external view isProject(_address) returns(uint256 activatedAmount) {
         return projects[_address].activators[_activator];
+    }
+
+    function getBalance() external view returns(uint256 _balance) {
+        return token.balanceOf(address(this));
+    }
+
+    function getProjects(uint256 _numOfProjects) external view returns(address[] memory projectContracts) {
+        uint256 length = projectAddresses.length;
+        uint256 stop = length - _numOfProjects;
+
+        if (stop < 0) {
+            stop = 0;
+        }
+
+        address[] memory _projectAddresses = new address[](_numOfProjects);
+        uint256 index = 0;
+
+        for (uint256 i = length-1; i >= stop; i--) {
+            _projectAddresses[index++] = projectAddresses[i];
+        }
+
+        return _projectAddresses;
+    }
+
+    function getNumProjects() external view returns(uint256 numProjects) {
+        return projectAddresses.length;
     }
 
     function sendRewardManually(address _address) external isOwner isProject(_address) {
@@ -165,7 +194,7 @@ contract CherrioProjectActivator is Owner {
         emit SendRefundAndReward(_address);
     }
 
-    function getBalance() external view returns(uint256 _balance) {
-        return token.balanceOf(address(this));
+    function _convertFromTronInt(uint256 tronAddress) internal pure returns(address){
+        return address(uint160(tronAddress));
     }
 }

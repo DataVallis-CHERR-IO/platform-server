@@ -2,22 +2,21 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { ProjectMedia } from './project-media.model'
-import { IUploadReq, IUploadRes, IRequest } from '../../interfaces/graphql/graphql.interface'
+import { IRequest } from '../../interfaces/graphql/graphql.interface'
 import { StatusEnum } from '../../enums/status.enum'
-import { HttpService } from '@nestjs/axios'
-import { ipfsHeaders } from '../../config/default.config'
+import { UploadService } from '../upload/upload.service'
 
 @Injectable()
 export class ProjectMediaService {
   /**
    * @constructor
    * @param {Model<ProjectMedia>} _projectMediaModel
-   * @param {HttpService} _httpService
+   * @param {UploadService} _uploadService
    */
   constructor(
     @InjectModel('ProjectMedia')
     private readonly _projectMediaModel: Model<ProjectMedia>,
-    private readonly _httpService: HttpService
+    private readonly _uploadService: UploadService
   ) {}
 
   /**
@@ -34,14 +33,15 @@ export class ProjectMediaService {
    */
   create = async (request: IRequest): Promise<boolean> => {
     try {
-      const uploaded = await this.upload({
+      const path = await this._uploadService.upload({
         title: request.args.title,
+        extension: `.${request.args.format}`,
         content: request.args.content
       })
 
       const projectMedia = new this._projectMediaModel({
         statusId: StatusEnum.ACTIVE,
-        path: uploaded[0].path,
+        path,
         ...request.args
       })
 
@@ -51,18 +51,4 @@ export class ProjectMediaService {
       return false
     }
   }
-
-  upload = async (upload: IUploadReq): Promise<IUploadRes[]> =>
-    (
-      await this._httpService.axiosRef.post(
-        process.env.IPFS_UPLOAD_URL,
-        [
-          {
-            path: `media/${upload.title}`,
-            content: upload.content
-          }
-        ],
-        { ...ipfsHeaders }
-      )
-    ).data
 }

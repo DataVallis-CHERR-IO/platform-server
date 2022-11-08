@@ -28,9 +28,7 @@ export interface IRequest {
 
 export interface IUploadReq {
   title: string
+  extension?: string
   content: string
-}
-
-export interface IUploadRes {
-  path: string
+  isObject?: boolean
 }

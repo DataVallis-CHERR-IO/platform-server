@@ -1,8 +1,6 @@
 import * as winston from 'winston'
 import { join } from 'path'
 import { Logger, Module } from '@nestjs/common'
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
 import { GraphQLModule } from '@nestjs/graphql'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
@@ -61,9 +59,8 @@ import { ContractCherrioProjectActivatorModule } from './modules/contracts/contr
     ProjectMediaModule,
     ContractCherrioProjectActivatorModule
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: GraphqlAuthGuard

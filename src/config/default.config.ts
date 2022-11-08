@@ -1,7 +1,7 @@
 import Mail from 'nodemailer/lib/mailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 import { translate } from '../utils/translate'
-import { IIPFSHeaders, ITemplateConfig } from '../interfaces/default.interface'
+import { IBTFSAuthHeaders, IBTFSUploadHeaders, ITemplateConfig } from '../interfaces/default.interface'
 import * as moment from 'moment'
 
 export const nodemailerConfig: SMTPTransport | SMTPTransport.Options | string = {
@@ -33,10 +33,15 @@ export const templateConfig: ITemplateConfig = {
   }
 }
 
-export const ipfsHeaders: IIPFSHeaders = {
+export const btfsAuthHeaders: IBTFSAuthHeaders = {
   headers: {
-    'X-API-KEY': process.env.MORALIS_API_KEY,
-    'Content-Type': 'application/json',
-    accept: 'application/json'
+    'API-KEY': process.env.BTFS_API_KEY,
+    'Content-Type': 'application/json'
+  }
+}
+
+export const btfsUploadHeaders: IBTFSUploadHeaders = {
+  headers: {
+    'Content-Type': 'multipart/form-data'
   }
 }

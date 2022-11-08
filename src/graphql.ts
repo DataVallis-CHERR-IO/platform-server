@@ -29,7 +29,7 @@ export abstract class IMutation {
 
     abstract subscribe(email: string): string | Promise<string>;
 
-    abstract upload(title: string, content: string): string | Promise<string>;
+    abstract upload(title: string, extension: string, content: string, isObject?: Nullable<boolean>): string | Promise<string>;
 }
 
 export abstract class IQuery {

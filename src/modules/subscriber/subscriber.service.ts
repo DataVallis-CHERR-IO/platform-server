@@ -25,7 +25,6 @@ export class SubscriberService {
     try {
       const subscriber = await this._subscriberModel.findOne(request.args).exec()
 
-      console.log(subscriber)
       if (subscriber) {
         return 'alreadySubscribed'
       }

@@ -6,10 +6,6 @@ export interface IRenderTemplate {
   [key: string]: string
 }
 
-export interface ITranslate {
-  [key: string]: any
-}
-
 export interface ITemplateConfig {
   email: {
     globalException: string
@@ -23,10 +19,16 @@ export interface IDatabaseDefaultProps {
   updatedAt?: string
 }
 
-export interface IIPFSHeaders {
+export interface IBTFSAuthHeaders {
   headers: {
-    'X-API-KEY': string
+    'API-KEY': string
     'Content-Type': string
-    accept: string
+  }
+}
+
+export interface IBTFSUploadHeaders {
+  headers: {
+    token?: string
+    'Content-Type': string
   }
 }

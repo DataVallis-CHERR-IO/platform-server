@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.11;
 
 /**
  * @title Owner
@@ -55,12 +55,13 @@ interface ICherrioProjectActivator {
 contract CherrioProject is Owner {
     address public admin;
     address public cherrioProjectActivator;
-    uint256 public minimumDonation;
+    string public tokenURI;
     uint256 public startedAt;
     uint256 public deadline;
     uint256 public endedAt;
     uint256 public goal;
     uint256 public raisedAmount;
+    uint256 public minimumDonation;
     uint public totalDonations;
     uint public totalDonors;
     uint public duration;
@@ -108,13 +109,14 @@ contract CherrioProject is Owner {
     event VoteForRequest(uint index, uint numberOfVoters);
     event MakePayment(uint index, uint256 value);
 
-    constructor(uint _duration, uint256 _goal) {
-        duration = _duration;
+    constructor(uint256 _goal, uint _duration, string memory _tokenURI) {
         goal = _goal;
+        duration = _duration;
+        tokenURI = _tokenURI;
         stage = Stages.Pending;
         minimumDonation = 0.00001*(10**18);
-        admin = 0x78b881eB26Db03B49239DB7cd7b2c92f95d9D63C;
-        cherrioProjectActivator = 0x3529B75B11A68276418bf4daaEB7f6ADD5852798;
+        admin = _convertFromTronInt(0x41f66a0abfd2c31f169855a83fc8da5d68775f6814);
+        cherrioProjectActivator = _convertFromTronInt(0x41a6dd2d61a7784ec796e5152110a3e62baaea5d6a);
     }
 
     receive() external payable {
@@ -122,7 +124,7 @@ contract CherrioProject is Owner {
     }
 
     function donate() public payable atStage(Stages.Active) {
-        require(msg.value >= minimumDonation);
+        //require(msg.value >= minimumDonation);
         require(block.timestamp <= deadline);
 
         if (donations[msg.sender] == 0) {
@@ -152,11 +154,11 @@ contract CherrioProject is Owner {
         emit ProjectActivated(startedAt, deadline);
     }
 
-    function getCurrentTime() public view returns(uint256){
+    function getCurrentTime() external view returns(uint256){
         return block.timestamp;
     }
 
-    function getRefund() public {
+    function getRefund() external {
         require(block.timestamp > endedAt);
         require(raisedAmount <= goal);
         require(donations[msg.sender] > 0);
@@ -180,7 +182,7 @@ contract CherrioProject is Owner {
         emit CreateSpendingRequest(_description, _recipient, _value);
     }
 
-    function voteForRequest(uint index) public {
+    function voteForRequest(uint index) external {
         Request storage request = requests[index];
         require(donations[msg.sender] > 0);
         require(request.voters[msg.sender] == false);
@@ -191,7 +193,7 @@ contract CherrioProject is Owner {
         emit VoteForRequest(index, request.numberOfVoters);
     }
 
-    function makePayment(uint index) public isAdmin {
+    function makePayment(uint index) external isAdmin {
         Request storage request = requests[index];
         require(request.completed == false);
         require(request.numberOfVoters >= totalDonors / 2);
@@ -202,7 +204,7 @@ contract CherrioProject is Owner {
         emit MakePayment(index, request.value);
     }
 
-    function getRequests() public view returns (string[] memory descriptions, uint256[] memory amounts, address[] memory recipients, bool[] memory completed, uint[] memory numberOfVoters){
+    function getRequests() external view returns (string[] memory descriptions, uint256[] memory amounts, address[] memory recipients, bool[] memory completed, uint[] memory numberOfVoters){
         string[] memory description = new string[](numRequests);
         uint256[] memory value = new uint256[](numRequests);
         address[] memory recipient = new address[](numRequests);
@@ -220,9 +222,13 @@ contract CherrioProject is Owner {
         return (description, value, recipient, complete, voters);
     }
 
-    function getRequest(uint index) public view returns (string memory description, uint256 amount, address recipient, bool completed, uint numberOfVoters){
+    function getRequest(uint index) external view returns (string memory description, uint256 amount, address recipient, bool completed, uint numberOfVoters){
         Request storage request = requests[index];
 
         return (request.description, request.value, request.recipient, request.completed, request.numberOfVoters);
+    }
+
+    function _convertFromTronInt(uint256 tronAddress) internal pure returns(address){
+        return address(uint160(tronAddress));
     }
 }
