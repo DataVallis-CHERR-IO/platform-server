@@ -3,6 +3,33 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport'
 import { translate } from '../utils/translate'
 import { IBTFSAuthHeaders, IBTFSUploadHeaders, ITemplateConfig } from '../interfaces/default.interface'
 import * as moment from 'moment'
+import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
+import { join } from 'path'
+import { GraphQLError } from 'graphql/index'
+import { IGraphQLErrorException } from '../interfaces/graphql/graphql.interface'
+import * as winston from 'winston'
+import { WinstonModuleOptions } from 'nest-winston'
+
+export const graphQLConfig: ApolloDriverConfig = {
+  driver: ApolloDriver,
+  typePaths: ['./**/*.graphql'],
+  installSubscriptionHandlers: true,
+  subscriptions: {
+    'graphql-ws': true,
+    'subscriptions-transport-ws': true
+  },
+  definitions: {
+    path: join(process.cwd(), 'src/graphql.ts'),
+    outputAs: 'class'
+  },
+  context: ({ req, res }) => ({ req, res }),
+  formatError: (graphQLError: GraphQLError) =>
+    ({
+      name: graphQLError.name,
+      message: graphQLError.message
+    } as IGraphQLErrorException)
+}
 
 export const nodemailerConfig: SMTPTransport | SMTPTransport.Options | string = {
   host: process.env.MAILER_HOST,
@@ -31,6 +58,26 @@ export const templateConfig: ITemplateConfig = {
     globalException: 'emails/global-exception',
     accountVerification: 'emails/account-verification'
   }
+}
+
+export const typeOrmConfig: TypeOrmModuleOptions = {
+  type: 'mysql',
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  synchronize: !!Number(process.env.DB_SYNCHRONIZE),
+  entities: [__dirname + '/../**/*.entity{.ts,.js}']
+}
+
+export const winstonConfig: WinstonModuleOptions = {
+  level: process.env.LOGGER_LEVEL,
+  transports: [
+    new winston.transports.File({
+      filename: join(process.cwd(), process.env.LOGGER_PATH)
+    })
+  ]
 }
 
 export const btfsAuthHeaders: IBTFSAuthHeaders = {

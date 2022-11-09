@@ -1,50 +1,50 @@
 import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-import { Project } from './project.model'
-import { IRequest } from '../../interfaces/graphql/graphql.interface'
+import { InjectRepository } from '@nestjs/typeorm'
+import { ProjectEntity } from './project.entity'
+import { Repository } from 'typeorm'
+import { BaseService } from '../base.service'
+import { Project } from '../../graphql'
+import { ProjectProjectTypeService } from '../project-project-type/project-project-type.service'
+import { ProjectProjectTypeEntity } from '../project-project-type/project-project-type.entity'
+import * as moment from 'moment'
 
 @Injectable()
-export class ProjectService {
+export class ProjectService extends BaseService<ProjectEntity> {
   /**
    * @constructor
-   * @param {Model<Project>} _projectModel
+   * @param {Repository<ProjectEntity>} _projectEntityRepository
+   * @param {ProjectProjectTypeService} _projectProjectTypeService
    */
   constructor(
-    @InjectModel('Project')
-    private readonly _projectModel: Model<Project>
-  ) {}
-
-  /**
-   * @method get
-   * @param {IRequest} request
-   * @returns {Promise<Project[]>}
-   */
-  get = async (request: IRequest): Promise<Project[]> => {
-    const projectModel = this._projectModel.find().select(request.select)
-
-    !request.skip || projectModel.skip(request.skip)
-    !request.limit || projectModel.limit(request.limit)
-    !request.sort || projectModel.sort({ [request.sort.orderBy]: request.sort.orderDirection === 'ASC' ? 1 : -1 })
-
-    return projectModel.exec()
+    @InjectRepository(ProjectEntity)
+    private readonly _projectEntityRepository: Repository<ProjectEntity>,
+    private readonly _projectProjectTypeService: ProjectProjectTypeService
+  ) {
+    super(_projectEntityRepository)
   }
 
   /**
-   * @method getBy
-   * @param {IRequest} request
-   * @returns {Promise<Project[]>}
-   */
-  getBy = async (request: IRequest): Promise<Project> => this._projectModel.findOne(request.args).select(request.select).exec()
-
-  /**
    * @method create
-   * @param {IRequest} request
-   * @returns {Promise<Project>}
+   * @param {Project} project
+   * @returns {Promise<ProjectEntity>}
    */
-  create = async (request: IRequest): Promise<Project> => {
+  create = async (project: Project): Promise<ProjectEntity> => {
     try {
-      return new this._projectModel(request.args).save()
+      const newProject = await this._projectEntityRepository.save({
+        ...project,
+        createdAt: moment().format(process.env.DATETIME_FORMAT)
+      })
+
+      for (const projectType of project.projectTypes) {
+        const projectProjectTypeEntity = new ProjectProjectTypeEntity()
+        projectProjectTypeEntity.projectId = newProject.id
+        projectProjectTypeEntity.projectTypeId = projectType.id
+        projectProjectTypeEntity.createdAt = moment().format(process.env.DATETIME_FORMAT)
+
+        await this._projectProjectTypeService.save(projectProjectTypeEntity)
+      }
+
+      return newProject
     } catch (error) {
       return null
     }

@@ -16,7 +16,7 @@ export class UploadService {
   constructor(private readonly _httpService: HttpService) {
     this._httpService.axiosRef
       .post(
-        process.env.BTFS_UPLOAD_URL_LOGIN,
+        `${process.env.BTFS_URL}/auth/login`,
         {
           email: process.env.BTFS_EMAIL,
           password: process.env.BTFS_PASSWORD
@@ -34,16 +34,12 @@ export class UploadService {
    */
   upload = async (upload: IUploadReq): Promise<string> => {
     try {
-      console.log(upload.title)
-      console.log(upload.extension)
-      const buffer = _.get(upload, 'isObject', false)
-        ? Buffer.from(upload.content)
-        : Buffer.from(upload.content.split(';base64,').pop(), 'base64')
+      const buffer = _.get(upload, 'isObject', false) ? Buffer.from(upload.content) : Buffer.from(upload.content.split(';base64,').pop(), 'base64')
       const formData = new FormData()
       formData.append('file', buffer, upload.title + upload.extension)
 
       const response = (
-        await this._httpService.axiosRef.post(process.env.BTFS_UPLOAD_URL_UPLOAD, formData, {
+        await this._httpService.axiosRef.post(`${process.env.BTFS_URL}/storage/btfs`, formData, {
           headers: { token: this._token, ...btfsUploadHeaders.headers }
         })
       ).data

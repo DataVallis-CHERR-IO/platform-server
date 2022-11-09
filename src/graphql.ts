@@ -1,4 +1,3 @@
-
 /*
  * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
@@ -8,24 +7,23 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export enum OrderDirection {
-    ASC = "ASC",
-    DESC = "DESC"
+export class WhereInput {
+    projectId: number;
+    mediaTypeId?: Nullable<number>;
+    slug: string;
 }
 
-export class Sort {
-    orderBy?: Nullable<string>;
-    orderDirection?: Nullable<OrderDirection>;
+export class ProjectTypeInput {
+    id: number;
+    lkName: string;
 }
 
 export abstract class IMutation {
     abstract newProject(contractAddress: string, goal: number): boolean | Promise<boolean>;
 
-    abstract createProjectDetail(projectId: string, description: string, requirements?: Nullable<string>): ProjectDetail | Promise<ProjectDetail>;
+    abstract createProjectMedia(projectId: number, mediaTypeId: number, name: string, path: string): boolean | Promise<boolean>;
 
-    abstract createProjectMedia(projectId: string, type: string, title: string, format: string, content: string): boolean | Promise<boolean>;
-
-    abstract createProject(title: string, excerpt: string, slug: string, image: string, contractAddress: string): Project | Promise<Project>;
+    abstract createProject(title: string, excerpt: string, description: string, slug: string, image: string, contractAddress: string, goal: number, duration: number, projectTypes: ProjectTypeInput[]): Project | Promise<Project>;
 
     abstract subscribe(email: string): string | Promise<string>;
 
@@ -33,44 +31,43 @@ export abstract class IMutation {
 }
 
 export abstract class IQuery {
-    abstract projectDetail(projectId: string): ProjectDetail | Promise<ProjectDetail>;
+    abstract mediaTypes(): Nullable<MediaType>[] | Promise<Nullable<MediaType>[]>;
 
-    abstract projectMedia(projectId: string, type?: Nullable<string>): Nullable<Nullable<ProjectMedia>[]> | Promise<Nullable<Nullable<ProjectMedia>[]>>;
+    abstract projectMedia(where: WhereInput): Nullable<Nullable<ProjectMedia>[]> | Promise<Nullable<Nullable<ProjectMedia>[]>>;
 
-    abstract projectTypes(): Nullable<Nullable<ProjectType>[]> | Promise<Nullable<Nullable<ProjectType>[]>>;
+    abstract projectProjectTypes(where: WhereInput): Nullable<ProjectProjectType>[] | Promise<Nullable<ProjectProjectType>[]>;
 
-    abstract projects(sort?: Nullable<Sort>, skip?: Nullable<number>, limit?: Nullable<number>): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
+    abstract projectTypes(): Nullable<ProjectType>[] | Promise<Nullable<ProjectType>[]>;
 
-    abstract project(slug: string): Nullable<Project> | Promise<Nullable<Project>>;
+    abstract projects(skip?: Nullable<number>, take?: Nullable<number>): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
+
+    abstract project(where: WhereInput): Nullable<Project> | Promise<Nullable<Project>>;
 }
 
-export class ProjectDetail {
-    _id?: Nullable<string>;
-    projectId?: Nullable<string>;
-    description?: Nullable<string>;
-    requirements?: Nullable<string>;
-    createdAt?: Nullable<string>;
-    updatedAt?: Nullable<string>;
+export class MediaType {
+    id: number;
+    lkName: string;
 }
 
 export class ProjectMedia {
-    _id?: Nullable<string>;
-    projectId?: Nullable<string>;
-    type?: Nullable<string>;
-    title?: Nullable<string>;
+    id: number;
+    projectId?: Nullable<number>;
+    mediaTypeId?: Nullable<number>;
+    name?: Nullable<string>;
     path?: Nullable<string>;
-    format?: Nullable<string>;
-    icon?: Nullable<string>;
     statusId?: Nullable<number>;
     createdAt?: Nullable<string>;
     updatedAt?: Nullable<string>;
 }
 
+export class ProjectProjectType {
+    id: number;
+    projectTypeId: number;
+}
+
 export class ProjectType {
-    _id?: Nullable<string>;
-    name?: Nullable<string>;
-    lkName?: Nullable<string>;
-    statusId?: Nullable<number>;
+    id: number;
+    lkName: string;
 }
 
 export abstract class ISubscription {
@@ -78,12 +75,18 @@ export abstract class ISubscription {
 }
 
 export class Project {
-    _id?: Nullable<string>;
+    id: number;
     title?: Nullable<string>;
     excerpt?: Nullable<string>;
+    description?: Nullable<string>;
     slug?: Nullable<string>;
     image?: Nullable<string>;
     contractAddress?: Nullable<string>;
+    goal?: Nullable<number>;
+    duration?: Nullable<number>;
+    projectTypes?: Nullable<Nullable<ProjectType>[]>;
+    createdAt?: Nullable<string>;
+    updatedAt?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;

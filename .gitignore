@@ -72,5 +72,3 @@ testem.log
 #SERVER
 /src/logs
 /src/config/env/*
-/src/web3/artifacts
-/src/web3/cache

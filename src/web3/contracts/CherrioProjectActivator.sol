@@ -26,7 +26,8 @@ contract Owner {
      * @dev Set contract deployer as owner
      */
     constructor() {
-        owner = msg.sender; // 'msg.sender' is sender of current call, contract deployer for a constructor
+        owner = msg.sender;
+        // 'msg.sender' is sender of current call, contract deployer for a constructor
         emit OwnerSet(address(0), owner);
     }
 
@@ -54,14 +55,15 @@ interface ICherrioProject {
 
 interface ICherrioToken {
     function balanceOf(address account) external view returns (uint256);
+
     function transfer(address to, uint value) external returns (bool);
+
     function transferFrom(address from, address to, uint value) external returns (bool);
 }
 
 contract CherrioProjectActivator is Owner {
     ICherrioToken public token;
     uint256 public reward = 150; // 1.5%
-    address[] public projectAddresses;
 
     struct Project {
         Stages stage;
@@ -108,8 +110,7 @@ contract CherrioProjectActivator is Owner {
         projects[_address].numActivators = _numActivators;
         projects[_address].activateSize = _activateSize;
         projects[_address].activatedAmount = 0;
-        projects[_address].reward = (_activateSize*reward)/10000;
-        projectAddresses.push(_address);
+        projects[_address].reward = (_activateSize * reward) / 10000;
 
         emit NewProject(_address, _activateSize, _numActivators, _stage);
     }
@@ -136,38 +137,16 @@ contract CherrioProjectActivator is Owner {
         emit ActivateProject(_address, msg.sender, msg.value);
     }
 
-    function getActivators(address _address) external view isProject(_address) returns(address[] memory activators) {
+    function getActivators(address _address) external view isProject(_address) returns (address[] memory activators) {
         return _activators[_address];
     }
 
-    function getActivatedAmount(address _address, address _activator) external view isProject(_address) returns(uint256 activatedAmount) {
+    function getActivatedAmount(address _address, address _activator) external view isProject(_address) returns (uint256 activatedAmount) {
         return projects[_address].activators[_activator];
     }
 
-    function getBalance() external view returns(uint256 _balance) {
+    function getBalance() external view returns (uint256 balance) {
         return token.balanceOf(address(this));
-    }
-
-    function getProjects(uint256 _numOfProjects) external view returns(address[] memory projectContracts) {
-        uint256 length = projectAddresses.length;
-        uint256 stop = length - _numOfProjects;
-
-        if (stop < 0) {
-            stop = 0;
-        }
-
-        address[] memory _projectAddresses = new address[](_numOfProjects);
-        uint256 index = 0;
-
-        for (uint256 i = length-1; i >= stop; i--) {
-            _projectAddresses[index++] = projectAddresses[i];
-        }
-
-        return _projectAddresses;
-    }
-
-    function getNumProjects() external view returns(uint256 numProjects) {
-        return projectAddresses.length;
     }
 
     function sendRewardManually(address _address) external isOwner isProject(_address) {
@@ -184,9 +163,9 @@ contract CherrioProjectActivator is Owner {
 
         require(!project.rewarded && numOfActivators > 0);
 
-        for(uint256 i = 0; i < numOfActivators; i++) {
+        for (uint256 i = 0; i < numOfActivators; i++) {
             payable(_activators[_address][i]).transfer(project.activators[_activators[_address][i]]);
-            token.transfer(payable(_activators[_address][i]), ((100*project.activators[_activators[_address][i]])/project.activatedAmount)/100*project.reward);
+            token.transfer(payable(_activators[_address][i]), ((100 * project.activators[_activators[_address][i]]) / project.activatedAmount) / 100 * project.reward);
         }
 
         project.rewarded = true;
@@ -194,7 +173,7 @@ contract CherrioProjectActivator is Owner {
         emit SendRefundAndReward(_address);
     }
 
-    function _convertFromTronInt(uint256 tronAddress) internal pure returns(address){
+    function _convertFromTronInt(uint256 tronAddress) internal pure returns (address){
         return address(uint160(tronAddress));
     }
 }

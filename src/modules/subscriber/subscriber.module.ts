@@ -1,19 +1,11 @@
 import { Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
 import { SubscriberService } from './subscriber.service'
 import { SubscriberResolver } from './subscriber.resolver'
-import { SubscriberSchema } from './subscriber.schema'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { SubscriberEntity } from './subscriber.entity'
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      {
-        name: 'Subscriber',
-        schema: SubscriberSchema,
-        collection: 'Subscriber'
-      }
-    ])
-  ],
+  imports: [TypeOrmModule.forFeature([SubscriberEntity])],
   providers: [SubscriberService, SubscriberResolver],
   exports: [SubscriberService]
 })

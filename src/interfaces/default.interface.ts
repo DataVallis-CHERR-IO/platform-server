@@ -13,12 +13,6 @@ export interface ITemplateConfig {
   }
 }
 
-export interface IDatabaseDefaultProps {
-  _id?: string
-  createdAt?: string
-  updatedAt?: string
-}
-
 export interface IBTFSAuthHeaders {
   headers: {
     'API-KEY': string

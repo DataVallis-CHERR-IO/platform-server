@@ -1,41 +1,41 @@
 import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-import { Subscriber } from './subscriber.model'
-import { StatusEnum } from '../../enums/status.enum'
-import { IRequest } from '../../interfaces/graphql/graphql.interface'
+import { BaseService } from '../base.service'
+import { InjectRepository } from '@nestjs/typeorm'
+import { FindOneOptions, Repository } from 'typeorm'
+import { SubscriberEntity } from './subscriber.entity'
+import * as moment from 'moment'
 
 @Injectable()
-export class SubscriberService {
+export class SubscriberService extends BaseService<SubscriberEntity> {
   /**
    * @constructor
-   * @param {Model<Subscriber>} _subscriberModel
+   * @param {Repository<SubscriberEntity>} _subscriberEntityRepository
    */
   constructor(
-    @InjectModel('Subscriber')
-    private readonly _subscriberModel: Model<Subscriber>
-  ) {}
+    @InjectRepository(SubscriberEntity)
+    private readonly _subscriberEntityRepository: Repository<SubscriberEntity>
+  ) {
+    super(_subscriberEntityRepository)
+  }
 
   /**
    * @method subscribe
-   * @param {IRequest} request
+   * @param {string} email
    * @returns {Promise<string>}
    */
-  subscribe = async (request: IRequest): Promise<string> => {
+  subscribe = async (email: string): Promise<string> => {
     try {
-      const subscriber = await this._subscriberModel.findOne(request.args).exec()
+      const subscriber = await this._subscriberEntityRepository.findOne({ where: { email } } as FindOneOptions)
 
       if (subscriber) {
         return 'alreadySubscribed'
       }
 
-      const newSubscriber = new this._subscriberModel({
-        email: request.args.email,
-        statusId: StatusEnum.ACTIVE,
-        subscribedAt: new Date()
-      })
+      const subscriberEntity = new SubscriberEntity()
+      subscriberEntity.email = email
+      subscriberEntity.subscribedAt = moment().format(process.env.DATETIME_FORMAT)
 
-      await newSubscriber.save()
+      await this._subscriberEntityRepository.save(subscriberEntity)
 
       return 'success'
     } catch (error) {

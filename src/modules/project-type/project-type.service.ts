@@ -1,24 +1,19 @@
 import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-import { ProjectType } from './project-type.model'
-import { IRequest } from '../../interfaces/graphql/graphql.interface'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { ProjectTypeEntity } from './project-type.entity'
+import { BaseService } from '../base.service'
 
 @Injectable()
-export class ProjectTypeService {
+export class ProjectTypeService extends BaseService<ProjectTypeEntity> {
   /**
    * @constructor
-   * @param {Model<ProjectType>} _projectTypeModel
+   * @param {Repository<ProjectTypeEntity>} _projectTypeEntityRepository
    */
   constructor(
-    @InjectModel('ProjectType')
-    private readonly _projectTypeModel: Model<ProjectType>
-  ) {}
-
-  /**
-   * @method get
-   * @param {IRequest} request
-   * @returns {Promise<ProjectType[]>}
-   */
-  get = async (request: IRequest): Promise<ProjectType[]> => this._projectTypeModel.find().select(request.select).exec()
+    @InjectRepository(ProjectTypeEntity)
+    private readonly _projectTypeEntityRepository: Repository<ProjectTypeEntity>
+  ) {
+    super(_projectTypeEntityRepository)
+  }
 }

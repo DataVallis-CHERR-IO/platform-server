@@ -1,51 +1,36 @@
 import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-import { ProjectMedia } from './project-media.model'
-import { IRequest } from '../../interfaces/graphql/graphql.interface'
-import { StatusEnum } from '../../enums/status.enum'
-import { UploadService } from '../upload/upload.service'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { BaseService } from '../base.service'
+import { ProjectMediaEntity } from './project-media.entity'
+import { ProjectMedia } from '../../graphql'
+import * as moment from 'moment/moment'
 
 @Injectable()
-export class ProjectMediaService {
+export class ProjectMediaService extends BaseService<ProjectMediaEntity> {
   /**
    * @constructor
-   * @param {Model<ProjectMedia>} _projectMediaModel
-   * @param {UploadService} _uploadService
+   * @param {Repository<ProjectMediaEntity>} _projectMediaEntityRepository
    */
   constructor(
-    @InjectModel('ProjectMedia')
-    private readonly _projectMediaModel: Model<ProjectMedia>,
-    private readonly _uploadService: UploadService
-  ) {}
-
-  /**
-   * @method getBy
-   * @param {IRequest} request
-   * @returns {Promise<ProjectMedia[]>}
-   */
-  getBy = async (request: IRequest): Promise<ProjectMedia[]> => this._projectMediaModel.find(request.args).select(request.select).exec()
+    @InjectRepository(ProjectMediaEntity)
+    private readonly _projectMediaEntityRepository: Repository<ProjectMediaEntity>
+  ) {
+    super(_projectMediaEntityRepository)
+  }
 
   /**
    * @method create
-   * @param {IRequest} request
+   * @param {ProjectMedia} projectMedia
    * @returns {Promise<boolean>}
    */
-  create = async (request: IRequest): Promise<boolean> => {
+  create = async (projectMedia: ProjectMedia): Promise<boolean> => {
     try {
-      const path = await this._uploadService.upload({
-        title: request.args.title,
-        extension: `.${request.args.format}`,
-        content: request.args.content
+      await this._projectMediaEntityRepository.save({
+        ...projectMedia,
+        createdAt: moment().format(process.env.DATETIME_FORMAT)
       })
 
-      const projectMedia = new this._projectMediaModel({
-        statusId: StatusEnum.ACTIVE,
-        path,
-        ...request.args
-      })
-
-      await projectMedia.save()
       return true
     } catch (error) {
       return false

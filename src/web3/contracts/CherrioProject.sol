@@ -26,7 +26,8 @@ contract Owner {
      * @dev Set contract deployer as owner
      */
     constructor() {
-        owner = msg.sender; // 'msg.sender' is sender of current call, contract deployer for a constructor
+        owner = msg.sender;
+        // 'msg.sender' is sender of current call, contract deployer for a constructor
         emit OwnerSet(address(0), owner);
     }
 
@@ -55,7 +56,6 @@ interface ICherrioProjectActivator {
 contract CherrioProject is Owner {
     address public admin;
     address public cherrioProjectActivator;
-    string public tokenURI;
     uint256 public startedAt;
     uint256 public deadline;
     uint256 public endedAt;
@@ -109,14 +109,13 @@ contract CherrioProject is Owner {
     event VoteForRequest(uint index, uint numberOfVoters);
     event MakePayment(uint index, uint256 value);
 
-    constructor(uint256 _goal, uint _duration, string memory _tokenURI) {
+    constructor(uint256 _goal, uint _duration) {
         goal = _goal;
         duration = _duration;
-        tokenURI = _tokenURI;
         stage = Stages.Pending;
-        minimumDonation = 0.00001*(10**18);
+        minimumDonation = 0.00001 * (10 ** 18);
         admin = _convertFromTronInt(0x41f66a0abfd2c31f169855a83fc8da5d68775f6814);
-        cherrioProjectActivator = _convertFromTronInt(0x41a6dd2d61a7784ec796e5152110a3e62baaea5d6a);
+        cherrioProjectActivator = _convertFromTronInt(0x412dde8f91b9ccc46549c11c101c6cdb32be6ec60b);
     }
 
     receive() external payable {
@@ -154,7 +153,7 @@ contract CherrioProject is Owner {
         emit ProjectActivated(startedAt, deadline);
     }
 
-    function getCurrentTime() external view returns(uint256){
+    function getCurrentTime() external view returns (uint256){
         return block.timestamp;
     }
 
@@ -167,8 +166,8 @@ contract CherrioProject is Owner {
         donations[msg.sender] = 0;
     }
 
-    function setMinimumDonation(uint _value) public isAdmin{
-        minimumDonation = _value*(10**18);
+    function setMinimumDonation(uint _value) public isAdmin {
+        minimumDonation = _value * (10 ** 18);
     }
 
     function createSpendingRequest(string memory _description, address _recipient, uint256 _value) public isOwner {
@@ -228,7 +227,7 @@ contract CherrioProject is Owner {
         return (request.description, request.value, request.recipient, request.completed, request.numberOfVoters);
     }
 
-    function _convertFromTronInt(uint256 tronAddress) internal pure returns(address){
+    function _convertFromTronInt(uint256 tronAddress) internal pure returns (address){
         return address(uint160(tronAddress));
     }
 }
