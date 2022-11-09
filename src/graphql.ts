@@ -1,3 +1,4 @@
+
 /*
  * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
@@ -7,10 +8,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export class WhereInput {
+export class WhereMediaInput {
     projectId: number;
     mediaTypeId?: Nullable<number>;
-    slug: string;
+}
+
+export class WhereProjectTypeInput {
+    projectId: number;
 }
 
 export class ProjectTypeInput {
@@ -18,12 +22,16 @@ export class ProjectTypeInput {
     lkName: string;
 }
 
+export class WhereProjectInput {
+    slug: string;
+}
+
 export abstract class IMutation {
     abstract newProject(contractAddress: string, goal: number): boolean | Promise<boolean>;
 
     abstract createProjectMedia(projectId: number, mediaTypeId: number, name: string, path: string): boolean | Promise<boolean>;
 
-    abstract createProject(title: string, excerpt: string, description: string, slug: string, image: string, contractAddress: string, goal: number, duration: number, projectTypes: ProjectTypeInput[]): Project | Promise<Project>;
+    abstract createProject(title: string, excerpt: string, description: string, slug: string, image: string, contractAddress: string, goal: number, duration: number, projectTypes: Nullable<ProjectTypeInput>[]): Project | Promise<Project>;
 
     abstract subscribe(email: string): string | Promise<string>;
 
@@ -33,15 +41,15 @@ export abstract class IMutation {
 export abstract class IQuery {
     abstract mediaTypes(): Nullable<MediaType>[] | Promise<Nullable<MediaType>[]>;
 
-    abstract projectMedia(where: WhereInput): Nullable<Nullable<ProjectMedia>[]> | Promise<Nullable<Nullable<ProjectMedia>[]>>;
+    abstract projectMedia(where: WhereMediaInput): Nullable<Nullable<ProjectMedia>[]> | Promise<Nullable<Nullable<ProjectMedia>[]>>;
 
-    abstract projectProjectTypes(where: WhereInput): Nullable<ProjectProjectType>[] | Promise<Nullable<ProjectProjectType>[]>;
+    abstract projectProjectTypes(where: WhereProjectTypeInput): Nullable<ProjectProjectType>[] | Promise<Nullable<ProjectProjectType>[]>;
 
     abstract projectTypes(): Nullable<ProjectType>[] | Promise<Nullable<ProjectType>[]>;
 
     abstract projects(skip?: Nullable<number>, take?: Nullable<number>): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
 
-    abstract project(where: WhereInput): Nullable<Project> | Promise<Nullable<Project>>;
+    abstract project(where: WhereProjectInput): Nullable<Project> | Promise<Nullable<Project>>;
 }
 
 export class MediaType {

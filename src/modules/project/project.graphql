@@ -1,6 +1,6 @@
 type Query {
     projects(skip: Int, take: Int): [Project]
-    project(where: WhereInput!): Project
+    project(where: WhereProjectInput!): Project
 }
 
 type Mutation {
@@ -31,6 +31,6 @@ input ProjectTypeInput {
     lkName: String!
 }
 
-input WhereInput {
+input WhereProjectInput {
     slug: String!
 }

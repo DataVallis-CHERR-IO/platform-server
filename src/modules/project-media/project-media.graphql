@@ -1,5 +1,5 @@
 type Query {
-    projectMedia(where: WhereInput!): [ProjectMedia]
+    projectMedia(where: WhereMediaInput!): [ProjectMedia]
 }
 
 type Mutation {
@@ -17,7 +17,7 @@ type ProjectMedia {
     updatedAt: String
 }
 
-input WhereInput {
+input WhereMediaInput {
     projectId: Int!
     mediaTypeId: Int
 }

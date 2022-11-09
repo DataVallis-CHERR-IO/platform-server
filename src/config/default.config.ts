@@ -71,6 +71,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   entities: [__dirname + '/../**/*.entity{.ts,.js}']
 }
 
+console.log(join(process.cwd(), process.env.LOGGER_PATH))
 export const winstonConfig: WinstonModuleOptions = {
   level: process.env.LOGGER_LEVEL,
   transports: [

@@ -1,5 +1,5 @@
 type Query {
-    projectProjectTypes(where: WhereInput!): [ProjectProjectType]!
+    projectProjectTypes(where: WhereProjectTypeInput!): [ProjectProjectType]!
 }
 
 type ProjectProjectType {
@@ -7,6 +7,6 @@ type ProjectProjectType {
     projectTypeId: Int!
 }
 
-input WhereInput {
+input WhereProjectTypeInput {
     projectId: Int!
 }
