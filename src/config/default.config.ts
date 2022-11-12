@@ -1,7 +1,13 @@
 import Mail from 'nodemailer/lib/mailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 import { translate } from '../utils/translate'
-import { IBTFSAuthHeaders, IBTFSUploadHeaders, ITemplateConfig } from '../interfaces/default.interface'
+import {
+  IBTFSAuthHeaderConfig,
+  IBTFSUploadHeaderConfig,
+  IContractProjectActivatorOptions,
+  IDatetimeOptions,
+  ITemplateConfig, ITronNetworkOptions
+} from '../interfaces/default.interface'
 import * as moment from 'moment'
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
@@ -10,6 +16,10 @@ import { GraphQLError } from 'graphql/index'
 import { IGraphQLErrorException } from '../interfaces/graphql/graphql.interface'
 import * as winston from 'winston'
 import { WinstonModuleOptions } from 'nest-winston'
+
+export const datetimeOptions: IDatetimeOptions = {
+  format: 'YYYY-MM-DD HH:mm:ss'
+}
 
 export const graphQLConfig: ApolloDriverConfig = {
   driver: ApolloDriver,
@@ -42,7 +52,7 @@ export const nodemailerConfig: SMTPTransport | SMTPTransport.Options | string = 
 
 export const nodemailerOptions = {
   mailOptions: {
-    subject: `${moment().format(process.env.DATETIME_FORMAT)}: ${translate('globalExceptionSubject')}`
+    subject: `${moment().format(datetimeOptions.format)}: ${translate('globalExceptionSubject')}`
   } as Mail.Options,
   asHtml: true
 }
@@ -80,14 +90,24 @@ export const winstonConfig: WinstonModuleOptions = {
   ]
 }
 
-export const btfsAuthHeaders: IBTFSAuthHeaders = {
+export const contractProjectActivatorOptions: IContractProjectActivatorOptions = {
+  address: 'TH9DcRg2FqjshEQgbXWi5bSaTLRUpyeWmc',
+  numActivators: 2,
+  activationPercentage: 10
+}
+
+export const tronNetworkOptions: ITronNetworkOptions = {
+  provider: 'https://nile.trongrid.io'
+}
+
+export const btfsAuthHeaderConfig: IBTFSAuthHeaderConfig = {
   headers: {
     'API-KEY': process.env.BTFS_API_KEY,
     'Content-Type': 'application/json'
   }
 }
 
-export const btfsUploadHeaders: IBTFSUploadHeaders = {
+export const btfsUploadHeaderConfig: IBTFSUploadHeaderConfig = {
   headers: {
     'Content-Type': 'multipart/form-data'
   }

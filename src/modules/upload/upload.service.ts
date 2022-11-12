@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { IUploadReq } from '../../interfaces/graphql/graphql.interface'
-import { btfsAuthHeaders, btfsUploadHeaders } from '../../config/default.config'
+import { btfsAuthHeaderConfig, btfsUploadHeaderConfig } from '../../config/default.config'
 import { HttpService } from '@nestjs/axios'
 import * as FormData from 'form-data'
 import * as _ from 'lodash'
@@ -21,7 +21,7 @@ export class UploadService {
           email: process.env.BTFS_EMAIL,
           password: process.env.BTFS_PASSWORD
         },
-        { ...btfsAuthHeaders }
+        { ...btfsAuthHeaderConfig }
       )
       .then(response => (this._token = response.data.data.token))
       .catch(() => {})
@@ -40,7 +40,7 @@ export class UploadService {
 
       const response = (
         await this._httpService.axiosRef.post(`${process.env.BTFS_URL}/storage/btfs`, formData, {
-          headers: { token: this._token, ...btfsUploadHeaders.headers }
+          headers: { token: this._token, ...btfsUploadHeaderConfig.headers }
         })
       ).data
 

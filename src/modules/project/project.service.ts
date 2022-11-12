@@ -6,6 +6,7 @@ import { BaseService } from '../base.service'
 import { Project } from '../../graphql'
 import { ProjectProjectTypeService } from '../project-project-type/project-project-type.service'
 import { ProjectProjectTypeEntity } from '../project-project-type/project-project-type.entity'
+import { datetimeOptions } from '../../config/default.config'
 import * as moment from 'moment'
 
 @Injectable()
@@ -32,14 +33,14 @@ export class ProjectService extends BaseService<ProjectEntity> {
     try {
       const newProject = await this._projectEntityRepository.save({
         ...project,
-        createdAt: moment().format(process.env.DATETIME_FORMAT)
+        createdAt: moment().format(datetimeOptions.format)
       })
 
       for (const projectType of project.projectTypes) {
         const projectProjectTypeEntity = new ProjectProjectTypeEntity()
         projectProjectTypeEntity.projectId = newProject.id
         projectProjectTypeEntity.projectTypeId = projectType.id
-        projectProjectTypeEntity.createdAt = moment().format(process.env.DATETIME_FORMAT)
+        projectProjectTypeEntity.createdAt = moment().format(datetimeOptions.format)
 
         await this._projectProjectTypeService.save(projectProjectTypeEntity)
       }

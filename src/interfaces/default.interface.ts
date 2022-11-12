@@ -13,14 +13,28 @@ export interface ITemplateConfig {
   }
 }
 
-export interface IBTFSAuthHeaders {
+export interface IContractProjectActivatorOptions {
+  address: string
+  numActivators: number
+  activationPercentage: number
+}
+
+export interface ITronNetworkOptions {
+  provider: string
+}
+
+export interface IDatetimeOptions {
+  format: string
+}
+
+export interface IBTFSAuthHeaderConfig {
   headers: {
     'API-KEY': string
     'Content-Type': string
   }
 }
 
-export interface IBTFSUploadHeaders {
+export interface IBTFSUploadHeaderConfig {
   headers: {
     token?: string
     'Content-Type': string

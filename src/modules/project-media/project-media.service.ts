@@ -4,6 +4,7 @@ import { Repository } from 'typeorm'
 import { BaseService } from '../base.service'
 import { ProjectMediaEntity } from './project-media.entity'
 import { ProjectMedia } from '../../graphql'
+import { datetimeOptions } from '../../config/default.config'
 import * as moment from 'moment/moment'
 
 @Injectable()
@@ -28,7 +29,7 @@ export class ProjectMediaService extends BaseService<ProjectMediaEntity> {
     try {
       await this._projectMediaEntityRepository.save({
         ...projectMedia,
-        createdAt: moment().format(process.env.DATETIME_FORMAT)
+        createdAt: moment().format(datetimeOptions.format)
       })
 
       return true

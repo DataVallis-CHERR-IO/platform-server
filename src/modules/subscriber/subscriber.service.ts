@@ -3,6 +3,7 @@ import { BaseService } from '../base.service'
 import { InjectRepository } from '@nestjs/typeorm'
 import { FindOneOptions, Repository } from 'typeorm'
 import { SubscriberEntity } from './subscriber.entity'
+import { datetimeOptions } from '../../config/default.config'
 import * as moment from 'moment'
 
 @Injectable()
@@ -33,7 +34,7 @@ export class SubscriberService extends BaseService<SubscriberEntity> {
 
       const subscriberEntity = new SubscriberEntity()
       subscriberEntity.email = email
-      subscriberEntity.subscribedAt = moment().format(process.env.DATETIME_FORMAT)
+      subscriberEntity.subscribedAt = moment().format(datetimeOptions.format)
 
       await this._subscriberEntityRepository.save(subscriberEntity)
 

@@ -2,6 +2,7 @@ import * as TronWeb from 'tronweb'
 import { Injectable } from '@nestjs/common'
 import { send } from '../../../web3/modules/send'
 import { StatusEnum } from '../../../enums/status.enum'
+import { contractProjectActivatorOptions } from '../../../config/default.config'
 
 @Injectable()
 export class ContractCherrioProjectActivatorService {
@@ -14,8 +15,8 @@ export class ContractCherrioProjectActivatorService {
     try {
       await send('newProject', [
         args.contractAddress,
-        TronWeb.toSun((Number(args.goal) * Number(process.env.CONTRACT_CHERRIO_PROJECT_ACTIVATOR_ACTIVATION_PERCENTAGE)) / 100),
-        Number(process.env.CONTRACT_CHERRIO_PROJECT_ACTIVATOR_NUM_ACTIVATORS),
+        TronWeb.toSun((Number(args.goal) * contractProjectActivatorOptions.activationPercentage) / 100),
+        contractProjectActivatorOptions.numActivators,
         StatusEnum.ACTIVE
       ])
 
