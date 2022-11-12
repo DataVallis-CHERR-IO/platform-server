@@ -9,11 +9,7 @@ const tronWeb = new TronWeb(
   process.env.TRON_PRIVATE_KEY
 )
 
-export const send = async (
-  method: string,
-  parameters: any[],
-  contractAddress: string = contractProjectActivatorOptions.address
-): Promise<any> => {
+export const send = async (method: string, parameters: any[], contractAddress: string = contractProjectActivatorOptions.address): Promise<any> => {
   try {
     return (await tronWeb.contract().at(contractAddress))[method](...parameters).send()
   } catch (error) {

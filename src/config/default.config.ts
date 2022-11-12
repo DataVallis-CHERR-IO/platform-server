@@ -6,7 +6,8 @@ import {
   IBTFSUploadHeaderConfig,
   IContractProjectActivatorOptions,
   IDatetimeOptions,
-  ITemplateConfig, ITronNetworkOptions
+  ITemplateConfig,
+  ITronNetworkOptions
 } from '../interfaces/default.interface'
 import * as moment from 'moment'
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
