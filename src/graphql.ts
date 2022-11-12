@@ -31,7 +31,7 @@ export abstract class IMutation {
 
     abstract createProjectMedia(projectId: number, mediaTypeId: number, name: string, path: string): boolean | Promise<boolean>;
 
-    abstract createProject(title: string, excerpt: string, description: string, slug: string, image: string, contractAddress: string, goal: number, duration: number, projectTypes: Nullable<ProjectTypeInput>[]): Project | Promise<Project>;
+    abstract createProject(title: string, excerpt: string, description: string, slug: string, image: string, contractAddress: string, goal: string, duration: number, projectTypes: Nullable<ProjectTypeInput>[]): Project | Promise<Project>;
 
     abstract subscribe(email: string): string | Promise<string>;
 
@@ -90,7 +90,7 @@ export class Project {
     slug?: Nullable<string>;
     image?: Nullable<string>;
     contractAddress?: Nullable<string>;
-    goal?: Nullable<number>;
+    goal?: Nullable<string>;
     duration?: Nullable<number>;
     projectTypes?: Nullable<Nullable<ProjectType>[]>;
     createdAt?: Nullable<string>;

@@ -26,8 +26,7 @@ contract Owner {
      * @dev Set contract deployer as owner
      */
     constructor() {
-        owner = msg.sender;
-        // 'msg.sender' is sender of current call, contract deployer for a constructor
+        owner = msg.sender; // 'msg.sender' is sender of current call, contract deployer for a constructor
         emit OwnerSet(address(0), owner);
     }
 
@@ -44,7 +43,7 @@ contract Owner {
      * @dev Return owner address
      * @return address of owner
      */
-    function getOwner() external view returns (address) {
+    function getOwner() public view returns (address) {
         return owner;
     }
 }
@@ -56,24 +55,24 @@ interface ICherrioProjectActivator {
 contract CherrioProject is Owner {
     address public admin;
     address public cherrioProjectActivator;
+    uint256 public minimumDonation;
+    uint256 public duration;
     uint256 public startedAt;
     uint256 public deadline;
     uint256 public endedAt;
     uint256 public goal;
     uint256 public raisedAmount;
-    uint256 public minimumDonation;
-    uint public totalDonations;
-    uint public totalDonors;
-    uint public duration;
+    uint256 public numDonations;
+    uint256 public numDonors;
+    uint256 public numRequests;
     Stages public stage;
-    uint public numRequests;
 
     struct Request {
+        address recipient;
         string description;
         uint256 value;
-        address recipient;
+        uint256 numVoters;
         bool completed;
-        uint numberOfVoters;
         mapping(address => bool) voters;
     }
 
@@ -85,7 +84,7 @@ contract CherrioProject is Owner {
     }
 
     mapping(address => uint256) public donations;
-    mapping(uint => Request) public requests;
+    mapping(uint256 => Request) public requests;
 
     modifier isAdmin {
         require(msg.sender == admin);
@@ -106,16 +105,16 @@ contract CherrioProject is Owner {
     event ProjectActivated(uint256 startedAt, uint256 deadline);
     event ProjectEnded();
     event CreateSpendingRequest(string description, address recipient, uint256 value);
-    event VoteForRequest(uint index, uint numberOfVoters);
-    event MakePayment(uint index, uint256 value);
+    event VoteForRequest(uint256 index, uint256 numberOfVoters);
+    event MakePayment(uint256 index, uint256 value);
 
-    constructor(uint256 _goal, uint _duration) {
+    constructor(uint256 _goal, uint256 _duration) {
         goal = _goal;
         duration = _duration;
         stage = Stages.Pending;
-        minimumDonation = 0.00001 * (10 ** 18);
+        minimumDonation = 1;
         admin = _convertFromTronInt(0x41f66a0abfd2c31f169855a83fc8da5d68775f6814);
-        cherrioProjectActivator = _convertFromTronInt(0x412dde8f91b9ccc46549c11c101c6cdb32be6ec60b);
+        cherrioProjectActivator = _convertFromTronInt(0x411bb346f9f7be21c920949af329c6ffcc2add2368);
     }
 
     receive() external payable {
@@ -127,12 +126,12 @@ contract CherrioProject is Owner {
         require(block.timestamp <= deadline);
 
         if (donations[msg.sender] == 0) {
-            totalDonors++;
+            numDonors++;
         }
 
         donations[msg.sender] += msg.value;
         raisedAmount += msg.value;
-        totalDonations++;
+        numDonations++;
 
         emit Donation(msg.sender, msg.value);
 
@@ -153,7 +152,7 @@ contract CherrioProject is Owner {
         emit ProjectActivated(startedAt, deadline);
     }
 
-    function getCurrentTime() external view returns (uint256){
+    function getCurrentTime() external view returns(uint256){
         return block.timestamp;
     }
 
@@ -166,8 +165,8 @@ contract CherrioProject is Owner {
         donations[msg.sender] = 0;
     }
 
-    function setMinimumDonation(uint _value) public isAdmin {
-        minimumDonation = _value * (10 ** 18);
+    function setMinimumDonation(uint256 _value) public isAdmin{
+        minimumDonation = _value*(10**18);
     }
 
     function createSpendingRequest(string memory _description, address _recipient, uint256 _value) public isOwner {
@@ -175,27 +174,58 @@ contract CherrioProject is Owner {
         r.description = _description;
         r.recipient = _recipient;
         r.value = _value;
-        r.numberOfVoters = 0;
+        r.numVoters = 0;
         r.completed = false;
 
         emit CreateSpendingRequest(_description, _recipient, _value);
     }
 
-    function voteForRequest(uint index) external {
+    function voteForRequest(uint256 index) external {
         Request storage request = requests[index];
         require(donations[msg.sender] > 0);
         require(request.voters[msg.sender] == false);
 
         request.voters[msg.sender] = true;
-        request.numberOfVoters++;
+        request.numVoters++;
 
-        emit VoteForRequest(index, request.numberOfVoters);
+        if (request.numVoters > numDonors / 2) {
+            makePayment(index);
+        }
+
+        emit VoteForRequest(index, request.numVoters);
     }
 
-    function makePayment(uint index) external isAdmin {
+    function getRequests() external view returns (string[] memory _descriptions, uint256[] memory _values, address[] memory _recipients, bool[] memory _completed, uint256[] memory _numVoters){
+        string[] memory descriptions = new string[](numRequests);
+        uint256[] memory values = new uint256[](numRequests);
+        address[] memory recipients = new address[](numRequests);
+        bool[] memory completed = new bool[](numRequests);
+        uint256[] memory numVoters = new uint256[](numRequests);
+
+        for (uint256 i = 0; i < numRequests; i++) {
+            Request storage request = requests[i];
+            descriptions[i] = request.description;
+            values[i] = request.value;
+            recipients[i] = request.recipient;
+            completed[i] = request.completed;
+            numVoters[i] = request.numVoters;
+        }
+        return (descriptions, values, recipients, completed, numVoters);
+    }
+
+    function getRequest(uint256 index) external view returns (string memory _description, uint256 _value, address _recipient, bool _completed, uint256 _numVoters){
+        Request storage request = requests[index];
+
+        return (request.description, request.value, request.recipient, request.completed, request.numVoters);
+    }
+
+    function getData() external view returns(address _owner, Stages _stage, uint256 _minimumDonation, uint256 _startedAt,  uint256 _deadline, uint256 _endedAt, uint256 _raisedAmount, uint256 _numDonations){
+        return (getOwner(), stage, minimumDonation, startedAt, deadline, endedAt, raisedAmount, numDonations);
+    }
+
+    function makePayment(uint256 index) internal {
         Request storage request = requests[index];
         require(request.completed == false);
-        require(request.numberOfVoters >= totalDonors / 2);
         //more or equal than 50% voted
         payable(request.recipient).transfer(request.value);
         request.completed = true;
@@ -203,31 +233,7 @@ contract CherrioProject is Owner {
         emit MakePayment(index, request.value);
     }
 
-    function getRequests() external view returns (string[] memory descriptions, uint256[] memory amounts, address[] memory recipients, bool[] memory completed, uint[] memory numberOfVoters){
-        string[] memory description = new string[](numRequests);
-        uint256[] memory value = new uint256[](numRequests);
-        address[] memory recipient = new address[](numRequests);
-        bool[] memory complete = new bool[](numRequests);
-        uint[] memory voters = new uint[](numRequests);
-
-        for (uint i = 0; i < numRequests; i++) {
-            Request storage request = requests[i];
-            description[i] = request.description;
-            value[i] = request.value;
-            recipient[i] = request.recipient;
-            complete[i] = request.completed;
-            voters[i] = request.numberOfVoters;
-        }
-        return (description, value, recipient, complete, voters);
-    }
-
-    function getRequest(uint index) external view returns (string memory description, uint256 amount, address recipient, bool completed, uint numberOfVoters){
-        Request storage request = requests[index];
-
-        return (request.description, request.value, request.recipient, request.completed, request.numberOfVoters);
-    }
-
-    function _convertFromTronInt(uint256 tronAddress) internal pure returns (address){
+    function _convertFromTronInt(uint256 tronAddress) internal pure returns(address){
         return address(uint160(tronAddress));
     }
 }

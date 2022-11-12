@@ -55,15 +55,16 @@ interface ICherrioProject {
 
 interface ICherrioToken {
     function balanceOf(address account) external view returns (uint256);
-
     function transfer(address to, uint value) external returns (bool);
-
     function transferFrom(address from, address to, uint value) external returns (bool);
 }
 
 contract CherrioProjectActivator is Owner {
     ICherrioToken public token;
     uint256 public reward = 150; // 1.5%
+
+    mapping(address => Project) public projects;
+    mapping(address => address[]) public activators;
 
     struct Project {
         Stages stage;
@@ -81,9 +82,6 @@ contract CherrioProjectActivator is Owner {
         Active,
         Ended
     }
-
-    mapping(address => Project) public projects;
-    mapping(address => address[]) private _activators;
 
     modifier isProject(address _address) {
         require(projects[_address].flag);
@@ -120,7 +118,7 @@ contract CherrioProjectActivator is Owner {
         require(projects[_address].activators[msg.sender] + msg.value <= (projects[_address].activateSize / projects[_address].numActivators));
 
         if (projects[_address].activators[msg.sender] == 0) {
-            _activators[_address].push(msg.sender);
+            activators[_address].push(msg.sender);
             emit NewActivator(_address, msg.sender);
         }
 
@@ -137,15 +135,15 @@ contract CherrioProjectActivator is Owner {
         emit ActivateProject(_address, msg.sender, msg.value);
     }
 
-    function getActivators(address _address) external view isProject(_address) returns (address[] memory activators) {
-        return _activators[_address];
+    function getActivators(address _address) external view isProject(_address) returns (address[] memory _activators) {
+        return activators[_address];
     }
 
-    function getActivatedAmount(address _address, address _activator) external view isProject(_address) returns (uint256 activatedAmount) {
+    function getActivatedAmount(address _address, address _activator) external view isProject(_address) returns (uint256 _activatedAmount) {
         return projects[_address].activators[_activator];
     }
 
-    function getBalance() external view returns (uint256 balance) {
+    function getBalance() external view returns (uint256 _balance) {
         return token.balanceOf(address(this));
     }
 
@@ -159,13 +157,13 @@ contract CherrioProjectActivator is Owner {
 
     function _sendRefundAndReward(address _address) internal {
         Project storage project = projects[_address];
-        uint256 numOfActivators = _activators[_address].length;
+        uint256 numOfActivators = activators[_address].length;
 
         require(!project.rewarded && numOfActivators > 0);
 
         for (uint256 i = 0; i < numOfActivators; i++) {
-            payable(_activators[_address][i]).transfer(project.activators[_activators[_address][i]]);
-            token.transfer(payable(_activators[_address][i]), ((100 * project.activators[_activators[_address][i]]) / project.activatedAmount) / 100 * project.reward);
+            payable(activators[_address][i]).transfer(project.activators[activators[_address][i]]);
+            token.transfer(payable(activators[_address][i]), ((100 * project.activators[activators[_address][i]]) / project.activatedAmount) / 100 * project.reward);
         }
 
         project.rewarded = true;

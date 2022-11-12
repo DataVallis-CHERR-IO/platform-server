@@ -46,11 +46,10 @@ export class ProjectEntity extends BaseEntity {
   contractAddress: string
 
   @Column({
-    type: 'decimal',
-    precision: 12,
-    scale: 2
+    type: 'varchar',
+    length: 31
   })
-  goal: number
+  goal: string
 
   @Column({
     type: 'int',
