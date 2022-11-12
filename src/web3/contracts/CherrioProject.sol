@@ -114,7 +114,7 @@ contract CherrioProject is Owner {
         stage = Stages.Pending;
         minimumDonation = 1;
         admin = _convertFromTronInt(0x41f66a0abfd2c31f169855a83fc8da5d68775f6814);
-        cherrioProjectActivator = _convertFromTronInt(0x411bb346f9f7be21c920949af329c6ffcc2add2368);
+        cherrioProjectActivator = _convertFromTronInt(0x414ead8c934cbe8b08d950711a85f3bc4bfc3ed9b6);
     }
 
     receive() external payable {
