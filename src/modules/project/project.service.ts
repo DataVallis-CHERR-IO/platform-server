@@ -8,6 +8,9 @@ import { ProjectProjectTypeService } from '../project-project-type/project-proje
 import { ProjectProjectTypeEntity } from '../project-project-type/project-project-type.entity'
 import { datetimeOptions } from '../../config/default.config'
 import * as moment from 'moment'
+import { IQueryOptions } from '../../interfaces/graphql/graphql.interface'
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
+import { StatusEnum } from '../../enums/status.enum'
 
 @Injectable()
 export class ProjectService extends BaseService<ProjectEntity> {
@@ -49,5 +52,18 @@ export class ProjectService extends BaseService<ProjectEntity> {
     } catch (error) {
       return null
     }
+  }
+
+  /**
+   * @method get
+   * @param {IQueryOptions} options
+   * @returns {Promise<ProjectEntity[]>}
+   */
+  get = async (options: IQueryOptions<ProjectEntity>): Promise<ProjectEntity[]> => {
+    options.where = { statusId: StatusEnum.ACTIVE }
+
+    return this._projectEntityRepository.find({
+      ...options
+    } as FindManyOptions)
   }
 }

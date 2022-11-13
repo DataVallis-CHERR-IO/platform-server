@@ -92,7 +92,7 @@ export const winstonConfig: WinstonModuleOptions = {
 }
 
 export const contractProjectActivatorOptions: IContractProjectActivatorOptions = {
-  address: 'TH9DcRg2FqjshEQgbXWi5bSaTLRUpyeWmc',
+  address: 'TAoNHeBQMWU8pxqhbdNT59hAkjDnSoxVPV',
   numActivators: 2,
   activationPercentage: 10
 }

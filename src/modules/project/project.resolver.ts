@@ -18,7 +18,7 @@ export class ProjectResolver {
   @Public()
   @Query('projects')
   async projects(@Args() args: any, @Info() info): Promise<ProjectEntity[]> {
-    return this._projectService.find({
+    return this._projectService.get({
       select: getQuerySelections(info),
       ...args
     })

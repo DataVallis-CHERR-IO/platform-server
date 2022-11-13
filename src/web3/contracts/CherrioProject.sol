@@ -114,7 +114,7 @@ contract CherrioProject is Owner {
         stage = Stages.Pending;
         minimumDonation = 1;
         admin = _convertFromTronInt(0x41f66a0abfd2c31f169855a83fc8da5d68775f6814);
-        cherrioProjectActivator = _convertFromTronInt(0x414ead8c934cbe8b08d950711a85f3bc4bfc3ed9b6);
+        cherrioProjectActivator = _convertFromTronInt(0x41091bb7b82d3cb54c6a7bfb346c0fd19015fec3e1); // TAoNHeBQMWU8pxqhbdNT59hAkjDnSoxVPV
     }
 
     receive() external payable {
@@ -122,7 +122,7 @@ contract CherrioProject is Owner {
     }
 
     function donate() public payable atStage(Stages.Active) {
-        //require(msg.value >= minimumDonation);
+        require(msg.value >= minimumDonation);
         require(block.timestamp <= deadline);
 
         if (donations[msg.sender] == 0) {
@@ -180,8 +180,8 @@ contract CherrioProject is Owner {
         emit CreateSpendingRequest(_description, _recipient, _value);
     }
 
-    function voteForRequest(uint256 index) external {
-        Request storage request = requests[index];
+    function voteForRequest(uint256 _index) external {
+        Request storage request = requests[_index];
         require(donations[msg.sender] > 0);
         require(request.voters[msg.sender] == false);
 
@@ -189,10 +189,10 @@ contract CherrioProject is Owner {
         request.numVoters++;
 
         if (request.numVoters > numDonors / 2) {
-            makePayment(index);
+            makePayment(_index);
         }
 
-        emit VoteForRequest(index, request.numVoters);
+        emit VoteForRequest(_index, request.numVoters);
     }
 
     function getRequests() external view returns (string[] memory _descriptions, uint256[] memory _values, address[] memory _recipients, bool[] memory _completed, uint256[] memory _numVoters){
@@ -210,30 +210,33 @@ contract CherrioProject is Owner {
             completed[i] = request.completed;
             numVoters[i] = request.numVoters;
         }
+
         return (descriptions, values, recipients, completed, numVoters);
     }
 
-    function getRequest(uint256 index) external view returns (string memory _description, uint256 _value, address _recipient, bool _completed, uint256 _numVoters){
-        Request storage request = requests[index];
-
-        return (request.description, request.value, request.recipient, request.completed, request.numVoters);
+    function getRequest(uint256 _index) external view returns (string memory _description, uint256 _value, address _recipient, bool _completed, uint256 _numVoters){
+        return (requests[_index].description, requests[_index].value, requests[_index].recipient, requests[_index].completed, requests[_index].numVoters);
     }
 
     function getData() external view returns(address _owner, Stages _stage, uint256 _minimumDonation, uint256 _startedAt,  uint256 _deadline, uint256 _endedAt, uint256 _raisedAmount, uint256 _numDonations){
         return (getOwner(), stage, minimumDonation, startedAt, deadline, endedAt, raisedAmount, numDonations);
     }
 
-    function makePayment(uint256 index) internal {
-        Request storage request = requests[index];
+    function getVoted(uint256 _index, address _address) external view returns(bool _voted) {
+        return requests[_index].voters[_address];
+    }
+
+    function makePayment(uint256 _index) internal {
+        Request storage request = requests[_index];
         require(request.completed == false);
         //more or equal than 50% voted
         payable(request.recipient).transfer(request.value);
         request.completed = true;
 
-        emit MakePayment(index, request.value);
+        emit MakePayment(_index, request.value);
     }
 
-    function _convertFromTronInt(uint256 tronAddress) internal pure returns(address){
-        return address(uint160(tronAddress));
+    function _convertFromTronInt(uint256 _tronAddress) internal pure returns(address){
+        return address(uint160(_tronAddress));
     }
 }
