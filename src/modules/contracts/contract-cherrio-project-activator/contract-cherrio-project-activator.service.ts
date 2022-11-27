@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { method } from '../../../web3/modules/contracts/cherrio-project-activator'
-import * as ethers from 'ethers'
 import { StatusEnum } from '../../../enums/status.enum'
+import { method } from '../../../web3/modules/contracts/method'
+import { contractOptions } from '../../../config/default.config'
+import * as ethers from 'ethers'
 
 @Injectable()
 export class ContractCherrioProjectActivatorService {
@@ -14,14 +15,11 @@ export class ContractCherrioProjectActivatorService {
     try {
       return method('newProject', [
         args.contractAddress,
-        ethers.utils
-          .parseUnits(((Number(args.goal) * Number(process.env.CONTRACT_CHERRIO_PROJECT_ACTIVATOR_ACTIVATION_PERCENTAGE)) / 100).toString(), 'ether')
-          .toString(),
-        Number(process.env.CONTRACT_CHERRIO_PROJECT_ACTIVATOR_NUM_ACTIVATORS),
+        ethers.utils.parseUnits(((Number(args.goal) * Number(contractOptions.projectActivator.activationPercentage)) / 100).toString(), 'ether').toString(),
+        Number(contractOptions.projectActivator.numActivators),
         StatusEnum.ACTIVE
       ])
     } catch (error) {
-      console.log(error)
       return false
     }
   }

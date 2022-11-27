@@ -75,6 +75,81 @@
         "ICherrioToken",
         "Owner"
       ]
+    },
+    "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform_polygon/server/src/web3/contracts/CherrioProject.sol": {
+      "lastModificationDate": 1668906201071,
+      "contentHash": "fff672331916c1b13ea7821452eb9457",
+      "sourceName": "src/web3/contracts/CherrioProject.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "CherrioProject",
+        "ICherrioProjectActivator",
+        "Owner"
+      ]
+    },
+    "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform_polygon/server/src/web3/contracts/CherrioProjectActivator.sol": {
+      "lastModificationDate": 1668835728699,
+      "contentHash": "d770b7a61d042508e4269f198496e28c",
+      "sourceName": "src/web3/contracts/CherrioProjectActivator.sol",
+      "solcConfig": {
+        "version": "0.8.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "CherrioProjectActivator",
+        "ICherrioProject",
+        "ICherrioToken",
+        "Owner"
+      ]
     }
   }
 }

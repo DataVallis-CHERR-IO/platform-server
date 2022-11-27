@@ -1,3 +1,4 @@
+import { networkOptions } from '../../config/default.config'
 import * as hre from 'hardhat'
 
 export const verify = async (address: string, constructorArguments: any[] = []): Promise<string> => {
@@ -8,7 +9,7 @@ export const verify = async (address: string, constructorArguments: any[] = []):
       constructorArguments
     })
 
-    return `${process.env.NETWORK_EXPLORER_URL}${address}#code`
+    return `${networkOptions.explorerUrl}${address}#code`
   } catch (error) {
     return error.message
   }

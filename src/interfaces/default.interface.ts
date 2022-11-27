@@ -6,10 +6,6 @@ export interface IRenderTemplate {
   [key: string]: string
 }
 
-export interface ITranslate {
-  [key: string]: any
-}
-
 export interface ITemplateConfig {
   email: {
     globalException: string
@@ -17,16 +13,37 @@ export interface ITemplateConfig {
   }
 }
 
-export interface IDatabaseDefaultProps {
-  _id?: string
-  createdAt?: string
-  updatedAt?: string
+export interface IDatetimeOptions {
+  format: string
 }
 
-export interface IIPFSHeaders {
-  headers: {
-    'X-API-KEY': string
-    'Content-Type': string
-    accept: string
+export interface IContractOptions {
+  projectActivator: {
+    address: string
+    numActivators: number
+    activationPercentage: number
+  }
+}
+
+export interface INetworkOptions {
+  url: string
+  explorerUrl: string
+  httpsProvider: string
+  wssProvider: string
+}
+
+export interface IBTFSConfig {
+  url: string
+  authHeaders: {
+    headers: {
+      'API-KEY': string
+      'Content-Type': string
+    }
+  },
+  uploadHeaders: {
+    headers: {
+      token?: string
+      'Content-Type': string
+    }
   }
 }

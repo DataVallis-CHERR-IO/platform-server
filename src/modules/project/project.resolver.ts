@@ -1,9 +1,10 @@
 import { Args, Info, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql'
 import { Public } from '../../decorators/public.decorator'
 import { ProjectService } from './project.service'
-import { Project } from './project.model'
 import { getQuerySelections } from '../../helpers/default.helper'
 import { PubSub } from 'graphql-subscriptions'
+import { ProjectEntity } from './project.entity'
+import { Project } from '../../graphql'
 
 @Resolver('Project')
 export class ProjectResolver {
@@ -16,8 +17,8 @@ export class ProjectResolver {
 
   @Public()
   @Query('projects')
-  async projects(@Args() args: any, @Info() info): Promise<Project[]> {
-    return await this._projectService.get({
+  async projects(@Args() args: any, @Info() info): Promise<ProjectEntity[]> {
+    return this._projectService.get({
       select: getQuerySelections(info),
       ...args
     })
@@ -25,17 +26,17 @@ export class ProjectResolver {
 
   @Public()
   @Query('project')
-  async project(@Args() args: any, @Info() info): Promise<Project> {
-    return this._projectService.getBy({
+  async project(@Args() args: any, @Info() info): Promise<ProjectEntity> {
+    return this._projectService.findOne({
       select: getQuerySelections(info),
-      args
+      ...args
     })
   }
 
   @Public()
   @Mutation('createProject')
-  async createProject(@Args() args: any): Promise<Project> {
-    const project = await this._projectService.create({ args })
+  async createProject(@Args() args: Project): Promise<ProjectEntity> {
+    const project = await this._projectService.create(args)
     this._pubSub.publish('projectCreated', { projectCreated: project })
 
     return project

@@ -13,8 +13,6 @@ export class SubscriberResolver {
   @Public()
   @Mutation('subscribe')
   async subscribe(@Args() args): Promise<string> {
-    return this._subscriberService.subscribe({
-      args
-    })
+    return this._subscriberService.subscribe(args.email)
   }
 }

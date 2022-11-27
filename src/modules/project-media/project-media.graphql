@@ -1,20 +1,23 @@
 type Query {
-    projectMedia(projectId: String!, type: String): [ProjectMedia]
+    projectMedia(where: WhereMediaInput!): [ProjectMedia]
 }
 
 type Mutation {
-    createProjectMedia(projectId: String!, type: String!, title: String!, format: String!, content: String!): Boolean!
+    createProjectMedia(projectId: Int!, mediaTypeId: Int!, name: String!, path: String!): Boolean!
 }
 
 type ProjectMedia {
-    _id: String
-    projectId: String
-    type: String
-    title: String
+    id: Int!
+    projectId: Int
+    mediaTypeId: Int
+    name: String
     path: String
-    format: String
-    icon: String
     statusId: Int
     createdAt: String
     updatedAt: String
+}
+
+input WhereMediaInput {
+    projectId: Int!
+    mediaTypeId: Int
 }

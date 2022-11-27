@@ -1,8 +1,8 @@
 import { Info, Query, Resolver } from '@nestjs/graphql'
 import { Public } from '../../decorators/public.decorator'
-import { ProjectTypeService } from './project-type.service'
 import { getQuerySelections } from '../../helpers/default.helper'
-import { ProjectType } from './project-type.model'
+import { ProjectTypeService } from './project-type.service'
+import { ProjectTypeEntity } from './project-type.entity'
 
 @Resolver('ProjectType')
 export class ProjectTypeResolver {
@@ -14,8 +14,8 @@ export class ProjectTypeResolver {
 
   @Public()
   @Query('projectTypes')
-  async projectTypes(@Info() info): Promise<ProjectType[]> {
-    return await this._projectTypeService.get({
+  async projectTypes(@Info() info): Promise<ProjectTypeEntity[]> {
+    return this._projectTypeService.find({
       select: getQuerySelections(info)
     })
   }

@@ -1,10 +1,8 @@
 type Query {
-    projectTypes: [ProjectType]
+    projectTypes: [ProjectType]!
 }
 
 type ProjectType {
-    _id: String
-    name: String
-    lkName: String
-    statusId: Int
+    id: Int!
+    lkName: String!
 }

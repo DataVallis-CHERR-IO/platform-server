@@ -3,10 +3,10 @@ import { verify } from './verify'
 
 export const deploy = async () => {
   try {
-    // const constructorArguments = []
-    const constructorArguments = [30, '20000000000000000']
-    const contractFactory = await hre.ethers.getContractFactory('CherrioProject')
-    // const contractFactory = await hre.ethers.getContractFactory('CherrioProjectActivator')
+    const constructorArguments = []
+    // const constructorArguments = [30, '20000000000000000']
+    // const contractFactory = await hre.ethers.getContractFactory('CherrioProject')
+    const contractFactory = await hre.ethers.getContractFactory('CherrioProjectActivator')
     const contract = await contractFactory.deploy(...constructorArguments) //40320 = 1 week in blocks 40320 "20000000000000000"
 
     await contract.deployed()

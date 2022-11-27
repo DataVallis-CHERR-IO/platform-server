@@ -1,3 +1,4 @@
+import { networkOptions } from './src/config/default.config'
 import '@nomiclabs/hardhat-waffle'
 import '@nomiclabs/hardhat-etherscan'
 import * as dotenv from 'dotenv'
@@ -15,7 +16,7 @@ const config = {
   solidity: '0.8.17',
   networks: {
     mumbai: {
-      url: process.env.NETWORK_URL,
+      url: networkOptions.url,
       accounts: [process.env.PRIVATE_KEY]
     }
   },

@@ -1,6 +1,5 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { Public } from '../../decorators/public.decorator'
-import { IUploadRes } from '../../interfaces/graphql/graphql.interface'
 import { UploadService } from './upload.service'
 
 @Resolver('Upload')
@@ -13,7 +12,7 @@ export class UploadResolver {
 
   @Public()
   @Mutation('upload')
-  async upload(@Args() args: any): Promise<IUploadRes> {
+  async upload(@Args() args: any): Promise<string> {
     return await this._uploadService.upload(args)
   }
 }

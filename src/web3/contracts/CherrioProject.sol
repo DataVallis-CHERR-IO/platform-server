@@ -43,7 +43,7 @@ contract Owner {
      * @dev Return owner address
      * @return address of owner
      */
-    function getOwner() external view returns (address) {
+    function getOwner() public view returns (address) {
         return owner;
     }
 }
@@ -56,23 +56,23 @@ contract CherrioProject is Owner {
     address public admin;
     address public cherrioProjectActivator;
     uint256 public minimumDonation;
+    uint256 public duration;
     uint256 public startedAt;
     uint256 public deadline;
     uint256 public endedAt;
     uint256 public goal;
     uint256 public raisedAmount;
-    uint public totalDonations;
-    uint public totalDonors;
-    uint public duration;
+    uint256 public numDonations;
+    uint256 public numDonors;
+    uint256 public numRequests;
     Stages public stage;
-    uint public numRequests;
 
     struct Request {
+        address recipient;
         string description;
         uint256 value;
-        address recipient;
+        uint256 numVoters;
         bool completed;
-        uint numberOfVoters;
         mapping(address => bool) voters;
     }
 
@@ -84,7 +84,7 @@ contract CherrioProject is Owner {
     }
 
     mapping(address => uint256) public donations;
-    mapping(uint => Request) public requests;
+    mapping(uint256 => Request) public requests;
 
     modifier isAdmin {
         require(msg.sender == admin);
@@ -105,16 +105,16 @@ contract CherrioProject is Owner {
     event ProjectActivated(uint256 startedAt, uint256 deadline);
     event ProjectEnded();
     event CreateSpendingRequest(string description, address recipient, uint256 value);
-    event VoteForRequest(uint index, uint numberOfVoters);
-    event MakePayment(uint index, uint256 value);
+    event VoteForRequest(uint256 index, uint256 numberOfVoters);
+    event MakePayment(uint256 index, uint256 value);
 
-    constructor(uint _duration, uint256 _goal) {
-        duration = _duration;
+    constructor(uint256 _goal, uint256 _duration) {
         goal = _goal;
+        duration = _duration;
         stage = Stages.Pending;
         minimumDonation = 0.00001*(10**18);
         admin = 0x78b881eB26Db03B49239DB7cd7b2c92f95d9D63C;
-        cherrioProjectActivator = 0x3529B75B11A68276418bf4daaEB7f6ADD5852798;
+        cherrioProjectActivator = 0x2A8A0532aAe8D55FC07AF723d5b0693ffB06Ea15;
     }
 
     receive() external payable {
@@ -126,12 +126,12 @@ contract CherrioProject is Owner {
         require(block.timestamp <= deadline);
 
         if (donations[msg.sender] == 0) {
-            totalDonors++;
+            numDonors++;
         }
 
         donations[msg.sender] += msg.value;
         raisedAmount += msg.value;
-        totalDonations++;
+        numDonations++;
 
         emit Donation(msg.sender, msg.value);
 
@@ -152,11 +152,11 @@ contract CherrioProject is Owner {
         emit ProjectActivated(startedAt, deadline);
     }
 
-    function getCurrentTime() public view returns(uint256){
+    function getCurrentTime() external view returns(uint256){
         return block.timestamp;
     }
 
-    function getRefund() public {
+    function getRefund() external {
         require(block.timestamp > endedAt);
         require(raisedAmount <= goal);
         require(donations[msg.sender] > 0);
@@ -165,7 +165,7 @@ contract CherrioProject is Owner {
         donations[msg.sender] = 0;
     }
 
-    function setMinimumDonation(uint _value) public isAdmin{
+    function setMinimumDonation(uint256 _value) public isAdmin{
         minimumDonation = _value*(10**18);
     }
 
@@ -174,55 +174,71 @@ contract CherrioProject is Owner {
         r.description = _description;
         r.recipient = _recipient;
         r.value = _value;
-        r.numberOfVoters = 0;
+        r.numVoters = 0;
         r.completed = false;
 
         emit CreateSpendingRequest(_description, _recipient, _value);
     }
 
-    function voteForRequest(uint index) public {
-        Request storage request = requests[index];
+    function voteForRequest(uint256 _index) external {
+        Request storage request = requests[_index];
         require(donations[msg.sender] > 0);
         require(request.voters[msg.sender] == false);
 
         request.voters[msg.sender] = true;
-        request.numberOfVoters++;
+        request.numVoters++;
 
-        emit VoteForRequest(index, request.numberOfVoters);
+        if (request.numVoters > numDonors / 2) {
+            makePayment(_index);
+        }
+
+        emit VoteForRequest(_index, request.numVoters);
     }
 
-    function makePayment(uint index) public isAdmin {
-        Request storage request = requests[index];
+    function getRequests() external view returns (string[] memory _descriptions, uint256[] memory _values, address[] memory _recipients, bool[] memory _completed, uint256[] memory _numVoters){
+        string[] memory descriptions = new string[](numRequests);
+        uint256[] memory values = new uint256[](numRequests);
+        address[] memory recipients = new address[](numRequests);
+        bool[] memory completed = new bool[](numRequests);
+        uint256[] memory numVoters = new uint256[](numRequests);
+
+        for (uint256 i = 0; i < numRequests; i++) {
+            Request storage request = requests[i];
+            descriptions[i] = request.description;
+            values[i] = request.value;
+            recipients[i] = request.recipient;
+            completed[i] = request.completed;
+            numVoters[i] = request.numVoters;
+        }
+
+        return (descriptions, values, recipients, completed, numVoters);
+    }
+
+    function getRequest(uint256 _index) external view returns (string memory _description, uint256 _value, address _recipient, bool _completed, uint256 _numVoters){
+        return (requests[_index].description, requests[_index].value, requests[_index].recipient, requests[_index].completed, requests[_index].numVoters);
+    }
+
+    function getData() external view returns(address _owner, Stages _stage, uint256 _minimumDonation, uint256 _startedAt,  uint256 _deadline, uint256 _endedAt, uint256 _raisedAmount, uint256 _numDonations){
+        return (getOwner(), stage, minimumDonation, startedAt, deadline, endedAt, raisedAmount, numDonations);
+    }
+
+    function getVotes(address _address) external view returns(bool[] memory _votes) {
+        bool[] memory votes = new bool[](numRequests);
+
+        for (uint256 i = 0; i < numRequests; i++) {
+            votes[i] = requests[i].voters[_address];
+        }
+
+        return votes;
+    }
+
+    function makePayment(uint256 _index) internal {
+        Request storage request = requests[_index];
         require(request.completed == false);
-        require(request.numberOfVoters >= totalDonors / 2);
         //more or equal than 50% voted
         payable(request.recipient).transfer(request.value);
         request.completed = true;
 
-        emit MakePayment(index, request.value);
-    }
-
-    function getRequests() public view returns (string[] memory descriptions, uint256[] memory amounts, address[] memory recipients, bool[] memory completed, uint[] memory numberOfVoters){
-        string[] memory description = new string[](numRequests);
-        uint256[] memory value = new uint256[](numRequests);
-        address[] memory recipient = new address[](numRequests);
-        bool[] memory complete = new bool[](numRequests);
-        uint[] memory voters = new uint[](numRequests);
-
-        for (uint i = 0; i < numRequests; i++) {
-            Request storage request = requests[i];
-            description[i] = request.description;
-            value[i] = request.value;
-            recipient[i] = request.recipient;
-            complete[i] = request.completed;
-            voters[i] = request.numberOfVoters;
-        }
-        return (description, value, recipient, complete, voters);
-    }
-
-    function getRequest(uint index) public view returns (string memory description, uint256 amount, address recipient, bool completed, uint numberOfVoters){
-        Request storage request = requests[index];
-
-        return (request.description, request.value, request.recipient, request.completed, request.numberOfVoters);
+        emit MakePayment(_index, request.value);
     }
 }

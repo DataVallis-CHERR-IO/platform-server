@@ -1,4 +1,8 @@
 import { GraphQLFormattedError } from 'graphql/error'
+import { ObjectLiteral } from 'typeorm/common/ObjectLiteral'
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions'
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere'
+import { FindOptionsOrder } from 'typeorm/find-options/FindOptionsOrder'
 
 export interface IGraphQLErrorException extends GraphQLFormattedError {
   lkMessage?: string
@@ -10,27 +14,15 @@ export interface ICommonRes {
   lkMessage: string
 }
 
-type OrderDirection = 'ASC' | 'DESC'
-
-interface ISort {
-  orderBy: string
-  orderDirection: OrderDirection
-}
-
-export interface IRequest {
-  args?: any
-  select?: string[]
-  where?: any
-  sort?: ISort
-  skip?: number
-  limit?: number
+export interface IQueryOptions<Entity extends ObjectLiteral> {
+  select?: FindManyOptions<Entity>
+  where?: FindOptionsWhere<Entity>[] | FindOptionsWhere<Entity>
+  order?: FindOptionsOrder<Entity>
 }
 
 export interface IUploadReq {
   title: string
+  extension?: string
   content: string
-}
-
-export interface IUploadRes {
-  path: string
+  isObject?: boolean
 }
