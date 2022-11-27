@@ -76,10 +76,10 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
 }
 
 export const winstonConfig: WinstonModuleOptions = {
-  level: process.env.LOGGER_LEVEL,
+  level: 'warn',
   transports: [
     new winston.transports.File({
-      filename: join(process.cwd(), process.env.LOGGER_PATH)
+      filename: join(process.cwd(), 'src/logs/logs.log')
     })
   ]
 }
