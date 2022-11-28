@@ -26,7 +26,6 @@ export interface IContractOptions {
 }
 
 export interface INetworkOptions {
-  url: string
   explorerUrl: string
   httpsProvider: string
   wssProvider: string

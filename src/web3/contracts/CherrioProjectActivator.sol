@@ -95,7 +95,7 @@ contract CherrioProjectActivator is Owner {
     event SendRefundAndReward(address indexed project);
 
     constructor() {
-        token = ICherrioToken(0xC4Ee5dD245972F842DC76fCF5FccbCf4a6DB32ee);
+        token = ICherrioToken(0x5dB2F2644911c9652Ad11351b1E5025a024ff0b3);
     }
 
     function newProject(address _address, uint256 _activateSize, uint256 _numActivators, Stages _stage) external isOwner {

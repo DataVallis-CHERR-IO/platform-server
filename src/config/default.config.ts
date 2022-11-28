@@ -86,17 +86,16 @@ export const winstonConfig: WinstonModuleOptions = {
 
 export const contractOptions: IContractOptions = {
   projectActivator: {
-    address: '0x2A8A0532aAe8D55FC07AF723d5b0693ffB06Ea15',
+    address: '0x8D41ccf877b06BC9EE4C861286C9913176BA7F18',
     numActivators: 2,
     activationPercentage: 10
   }
 }
 
 export const networkOptions: INetworkOptions = {
-  url: 'https://polygon-mumbai.infura.io/v3/dc6a2af74f2a4b3bb7cf1e2af4445434',
-  explorerUrl: 'https://mumbai.polygonscan.com/address/',
-  httpsProvider: 'https://snowy-holy-reel.matic-testnet.discover.quiknode.pro/e29148ae456d63b706b51806d8a3c41f5a4609c6/',
-  wssProvider: 'wss://snowy-holy-reel.matic-testnet.discover.quiknode.pro/e29148ae456d63b706b51806d8a3c41f5a4609c6/'
+  explorerUrl: 'https://goerli.etherscan.io/address/',
+  httpsProvider: 'https://goerli.infura.io/v3/9e4165a8806947a08e67ec27c5039607',
+  wssProvider: 'wss://goerli.infura.io/ws/v3/9e4165a8806947a08e67ec27c5039607'
 }
 
 export const btfsConfig: IBTFSConfig = {

@@ -15,8 +15,8 @@ const config = {
   },
   solidity: '0.8.17',
   networks: {
-    mumbai: {
-      url: networkOptions.url,
+    goerli: {
+      url: networkOptions.httpsProvider,
       accounts: [process.env.PRIVATE_KEY]
     }
   },
