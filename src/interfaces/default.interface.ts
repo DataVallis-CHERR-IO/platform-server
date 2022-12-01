@@ -38,7 +38,7 @@ export interface IBTFSConfig {
       'API-KEY': string
       'Content-Type': string
     }
-  },
+  }
   uploadHeaders: {
     headers: {
       token?: string
