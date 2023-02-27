@@ -6638,6 +6638,11 @@ pluralize@8.0.0:
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-8.0.0.tgz#1a6fa16a38d12a1901e0320fa017051c539ce3b1"
   integrity sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==
 
+pollinationx@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/pollinationx/-/pollinationx-0.0.4.tgz#fcb254c711e90306c001284d8fff1281fa9cb5a8"
+  integrity sha512-a96urIBMJWo8ZyEKJwudUVsnTxJKhqipFN5tlei5EWE5AZJXJInDQ1Y0IjjlXjbWWVy+QyLV9DHeHVWCUIULCA==
+
 prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
