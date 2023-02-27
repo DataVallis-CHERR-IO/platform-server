@@ -1,36 +1,46 @@
 type Query {
-    projects(skip: Int, take: Int): [Project]
-    project(where: WhereProjectInput!): Project
+  projects(skip: Int, take: Int): [Project]
+  project(where: WhereProjectInput!): Project
 }
 
 type Mutation {
-    createProject(title: String!, excerpt: String!, description: String!, slug: String!, image: String!, contractAddress: String!, goal: String!, duration: Int!, projectTypes: [ProjectTypeInput]!): Project!
+  createProject(
+    title: String!
+    excerpt: String!
+    description: String!
+    slug: String!
+    image: String!
+    contractAddress: String!
+    goal: String!
+    duration: Int!
+    projectTypes: [ProjectTypeInput]!
+  ): Project!
 }
 
 type Subscription {
-    projectCreated: Project!
+  projectCreated: Project!
 }
 
 type Project {
-    id: Int!
-    title: String
-    excerpt: String
-    description: String
-    slug: String
-    image: String
-    contractAddress: String
-    goal: String
-    duration: Int
-    projectTypes: [ProjectType]
-    createdAt: String
-    updatedAt: String
+  id: Int!
+  title: String
+  excerpt: String
+  description: String
+  slug: String
+  image: String
+  contractAddress: String
+  goal: String
+  duration: Int
+  projectTypes: [ProjectType]
+  createdAt: String
+  updatedAt: String
 }
 
 input ProjectTypeInput {
-    id: Int!
-    lkName: String!
+  id: Int!
+  lkName: String!
 }
 
 input WhereProjectInput {
-    slug: String!
+  slug: String!
 }

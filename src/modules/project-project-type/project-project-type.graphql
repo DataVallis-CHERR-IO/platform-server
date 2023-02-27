@@ -1,12 +1,12 @@
 type Query {
-    projectProjectTypes(where: WhereProjectTypeInput!): [ProjectProjectType]!
+  projectProjectTypes(where: WhereProjectTypeInput!): [ProjectProjectType]!
 }
 
 type ProjectProjectType {
-    id: Int!
-    projectTypeId: Int!
+  id: Int!
+  projectTypeId: Int!
 }
 
 input WhereProjectTypeInput {
-    projectId: Int!
+  projectId: Int!
 }

@@ -1,4 +1,3 @@
-
 /*
  * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
@@ -9,92 +8,102 @@
 /* eslint-disable */
 
 export class WhereMediaInput {
-    projectId: number;
-    mediaTypeId?: Nullable<number>;
+  projectId: number
+  mediaTypeId?: Nullable<number>
 }
 
 export class WhereProjectTypeInput {
-    projectId: number;
+  projectId: number
 }
 
 export class ProjectTypeInput {
-    id: number;
-    lkName: string;
+  id: number
+  lkName: string
 }
 
 export class WhereProjectInput {
-    slug: string;
+  slug: string
 }
 
 export abstract class IMutation {
-    abstract newProject(contractAddress: string, goal: number): boolean | Promise<boolean>;
+  abstract newProject(contractAddress: string, goal: number): boolean | Promise<boolean>
 
-    abstract createProjectMedia(projectId: number, mediaTypeId: number, name: string, path: string): boolean | Promise<boolean>;
+  abstract createProjectMedia(projectId: number, mediaTypeId: number, name: string, path: string): boolean | Promise<boolean>
 
-    abstract createProject(title: string, excerpt: string, description: string, slug: string, image: string, contractAddress: string, goal: string, duration: number, projectTypes: Nullable<ProjectTypeInput>[]): Project | Promise<Project>;
+  abstract createProject(
+    title: string,
+    excerpt: string,
+    description: string,
+    slug: string,
+    image: string,
+    contractAddress: string,
+    goal: string,
+    duration: number,
+    projectTypes: Nullable<ProjectTypeInput>[]
+  ): Project | Promise<Project>
 
-    abstract subscribe(email: string): string | Promise<string>;
+  abstract subscribe(email: string): string | Promise<string>
 
-    abstract upload(title: string, extension: string, content: string, isObject?: Nullable<boolean>): string | Promise<string>;
+  abstract upload(title: string, extension: string, content: string, isObject?: Nullable<boolean>): string | Promise<string>
 }
 
 export abstract class IQuery {
-    abstract mediaTypes(): Nullable<MediaType>[] | Promise<Nullable<MediaType>[]>;
+  abstract mediaTypes(): Nullable<MediaType>[] | Promise<Nullable<MediaType>[]>
 
-    abstract projectMedia(where: WhereMediaInput): Nullable<Nullable<ProjectMedia>[]> | Promise<Nullable<Nullable<ProjectMedia>[]>>;
+  abstract projectMedia(where: WhereMediaInput): Nullable<Nullable<ProjectMedia>[]> | Promise<Nullable<Nullable<ProjectMedia>[]>>
 
-    abstract projectProjectTypes(where: WhereProjectTypeInput): Nullable<ProjectProjectType>[] | Promise<Nullable<ProjectProjectType>[]>;
+  abstract projectProjectTypes(where: WhereProjectTypeInput): Nullable<ProjectProjectType>[] | Promise<Nullable<ProjectProjectType>[]>
 
-    abstract projectTypes(): Nullable<ProjectType>[] | Promise<Nullable<ProjectType>[]>;
+  abstract projectTypes(): Nullable<ProjectType>[] | Promise<Nullable<ProjectType>[]>
 
-    abstract projects(skip?: Nullable<number>, take?: Nullable<number>): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
+  abstract projects(skip?: Nullable<number>, take?: Nullable<number>): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>
 
-    abstract project(where: WhereProjectInput): Nullable<Project> | Promise<Nullable<Project>>;
+  abstract project(where: WhereProjectInput): Nullable<Project> | Promise<Nullable<Project>>
 }
 
 export class MediaType {
-    id: number;
-    lkName: string;
+  id: number
+  lkName: string
 }
 
 export class ProjectMedia {
-    id: number;
-    projectId?: Nullable<number>;
-    mediaTypeId?: Nullable<number>;
-    name?: Nullable<string>;
-    path?: Nullable<string>;
-    statusId?: Nullable<number>;
-    createdAt?: Nullable<string>;
-    updatedAt?: Nullable<string>;
+  id: number
+  projectId?: Nullable<number>
+  mediaTypeId?: Nullable<number>
+  name?: Nullable<string>
+  path?: Nullable<string>
+  statusId?: Nullable<number>
+  createdAt?: Nullable<string>
+  updatedAt?: Nullable<string>
 }
 
 export class ProjectProjectType {
-    id: number;
-    projectTypeId: number;
+  id: number
+  projectTypeId: number
 }
 
 export class ProjectType {
-    id: number;
-    lkName: string;
+  id: number
+  lkName: string
 }
 
 export abstract class ISubscription {
-    abstract projectCreated(): Project | Promise<Project>;
+  abstract projectCreated(): Project | Promise<Project>
 }
 
 export class Project {
-    id: number;
-    title?: Nullable<string>;
-    excerpt?: Nullable<string>;
-    description?: Nullable<string>;
-    slug?: Nullable<string>;
-    image?: Nullable<string>;
-    contractAddress?: Nullable<string>;
-    goal?: Nullable<string>;
-    duration?: Nullable<number>;
-    projectTypes?: Nullable<Nullable<ProjectType>[]>;
-    createdAt?: Nullable<string>;
-    updatedAt?: Nullable<string>;
+  id: number
+  title?: Nullable<string>
+  excerpt?: Nullable<string>
+  description?: Nullable<string>
+  slug?: Nullable<string>
+  image?: Nullable<string>
+  contractAddress?: Nullable<string>
+  goal?: Nullable<string>
+  duration?: Nullable<number>
+  projectTypes?: Nullable<Nullable<ProjectType>[]>
+  createdAt?: Nullable<string>
+  updatedAt?: Nullable<string>
 }
 
-type Nullable<T> = T | null;
+type Nullable<T> = T | null

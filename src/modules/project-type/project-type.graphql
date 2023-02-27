@@ -1,8 +1,8 @@
 type Query {
-    projectTypes: [ProjectType]!
+  projectTypes: [ProjectType]!
 }
 
 type ProjectType {
-    id: Int!
-    lkName: String!
+  id: Int!
+  lkName: String!
 }

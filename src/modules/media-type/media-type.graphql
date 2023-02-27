@@ -1,8 +1,8 @@
 type Query {
-    mediaTypes: [MediaType]!
+  mediaTypes: [MediaType]!
 }
 
 type MediaType {
-    id: Int!
-    lkName: String!
+  id: Int!
+  lkName: String!
 }

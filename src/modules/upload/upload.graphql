@@ -1,3 +1,3 @@
 type Mutation {
-    upload(title: String!, extension: String!, content: String!, isObject: Boolean): String!
+  upload(title: String!, extension: String!, content: String!, isObject: Boolean): String!
 }

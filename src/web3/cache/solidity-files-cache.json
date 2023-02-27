@@ -14,29 +14,15 @@
           },
           "outputSelection": {
             "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
+              "*": ["abi", "evm.bytecode", "evm.deployedBytecode", "evm.methodIdentifiers", "metadata"],
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.17"
-      ],
-      "artifacts": [
-        "CherrioProject",
-        "ICherrioProjectActivator",
-        "Owner"
-      ]
+      "versionPragmas": ["^0.8.17"],
+      "artifacts": ["CherrioProject", "ICherrioProjectActivator", "Owner"]
     },
     "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform/server/src/web3/contracts/CherrioProjectActivator.sol": {
       "lastModificationDate": 1666738489362,
@@ -51,30 +37,15 @@
           },
           "outputSelection": {
             "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
+              "*": ["abi", "evm.bytecode", "evm.deployedBytecode", "evm.methodIdentifiers", "metadata"],
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.17"
-      ],
-      "artifacts": [
-        "CherrioProjectActivator",
-        "ICherrioProject",
-        "ICherrioToken",
-        "Owner"
-      ]
+      "versionPragmas": ["^0.8.17"],
+      "artifacts": ["CherrioProjectActivator", "ICherrioProject", "ICherrioToken", "Owner"]
     },
     "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform_polygon/server/src/web3/contracts/CherrioProject.sol": {
       "lastModificationDate": 1668906201071,
@@ -89,29 +60,15 @@
           },
           "outputSelection": {
             "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
+              "*": ["abi", "evm.bytecode", "evm.deployedBytecode", "evm.methodIdentifiers", "metadata"],
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.17"
-      ],
-      "artifacts": [
-        "CherrioProject",
-        "ICherrioProjectActivator",
-        "Owner"
-      ]
+      "versionPragmas": ["^0.8.17"],
+      "artifacts": ["CherrioProject", "ICherrioProjectActivator", "Owner"]
     },
     "/Volumes/Data/Projects/Companies/DataVallis/Projects/Own/Cherrio/platform_polygon/server/src/web3/contracts/CherrioProjectActivator.sol": {
       "lastModificationDate": 1668835728699,
@@ -126,30 +83,15 @@
           },
           "outputSelection": {
             "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
+              "*": ["abi", "evm.bytecode", "evm.deployedBytecode", "evm.methodIdentifiers", "metadata"],
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.17"
-      ],
-      "artifacts": [
-        "CherrioProjectActivator",
-        "ICherrioProject",
-        "ICherrioToken",
-        "Owner"
-      ]
+      "versionPragmas": ["^0.8.17"],
+      "artifacts": ["CherrioProjectActivator", "ICherrioProject", "ICherrioToken", "Owner"]
     }
   }
 }
