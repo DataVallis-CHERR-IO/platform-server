@@ -30,19 +30,3 @@ export interface INetworkOptions {
   httpsProvider: string
   wssProvider: string
 }
-
-export interface IBTFSConfig {
-  url: string
-  authHeaders: {
-    headers: {
-      'API-KEY': string
-      'Content-Type': string
-    }
-  }
-  uploadHeaders: {
-    headers: {
-      token?: string
-      'Content-Type': string
-    }
-  }
-}

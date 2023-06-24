@@ -1,7 +1,7 @@
 import Mail from 'nodemailer/lib/mailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 import { translate } from '../utils/translate'
-import { IBTFSConfig, IContractOptions, IDatetimeOptions, INetworkOptions, ITemplateConfig } from '../interfaces/default.interface'
+import { IContractOptions, IDatetimeOptions, INetworkOptions, ITemplateConfig } from '../interfaces/default.interface'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { join } from 'path'
 import { GraphQLError } from 'graphql/error'
@@ -96,19 +96,4 @@ export const networkOptions: INetworkOptions = {
   explorerUrl: 'https://goerli.etherscan.io/address/',
   httpsProvider: 'https://goerli.infura.io/v3/9e4165a8806947a08e67ec27c5039607',
   wssProvider: 'wss://goerli.infura.io/ws/v3/9e4165a8806947a08e67ec27c5039607'
-}
-
-export const btfsConfig: IBTFSConfig = {
-  url: 'https://api.datavallis.com/v1',
-  authHeaders: {
-    headers: {
-      'API-KEY': process.env.BTFS_API_KEY,
-      'Content-Type': 'application/json'
-    }
-  },
-  uploadHeaders: {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  }
 }
