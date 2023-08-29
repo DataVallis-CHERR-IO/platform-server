@@ -46,7 +46,7 @@ export const nodemailerConfig: SMTPTransport | SMTPTransport.Options | string = 
 
 export const nodemailerOptions = {
   mailOptions: {
-    subject: `${moment().format(process.env.DATETIME_FORMAT)}: ${translate('globalExceptionSubject')}`
+    subject: `${moment().format('YYYY-MM-DD HH:mm:ss')}: ${translate('globalExceptionSubject')}`
   } as Mail.Options,
   asHtml: true
 }
